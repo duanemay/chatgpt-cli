@@ -7,7 +7,7 @@ import (
 )
 
 var replaySessionCmd = &cobra.Command{
-	Use:   "replaySession",
+	Use:   "replay-session",
 	Short: "Replay a chat session from saved file",
 	Long:  "Replay  a chat session from saved file",
 	Run:   replaySessionCmdRunner,
@@ -15,8 +15,8 @@ var replaySessionCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(replaySessionCmd)
-	replaySessionCmd.Flags().StringP("sessionFile", "s", "", "File to replay a Session from")
-	_ = replaySessionCmd.MarkFlagRequired("sessionFile")
+	replaySessionCmd.Flags().StringVarP(&sessionFile, FlagSessionFile, "s", "", "File to replay a Session from")
+	_ = replaySessionCmd.MarkFlagRequired(FlagSessionFile)
 }
 
 func replaySessionCmdRunner(cmd *cobra.Command, args []string) {

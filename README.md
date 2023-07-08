@@ -66,8 +66,8 @@ Available Commands:
   chat          Enter a chat session with ChatGPT
   completion    Generate the autocompletion script for the specified shell
   help          Help about any command
-  listModels    lists all models available to your account
-  replaySession Replay a chat session from saved file
+  list-models    lists all models available to your account
+  replay-session Replay a chat session from saved file
   version       displays version information
 
 Flags:
@@ -131,22 +131,22 @@ chatgpt-cli chat --session-file session.json
 Model, Role, Temperature, Max Tokens, Top P can be set with the `--model`, `--role`, `--temperature`, `--max-tokens`, `--top-p` flags.
 These can be changed when resuming a session with the `--session-file` flag.
 
-### replaySession
+### replay-session
 
 Replay a chat session from saved file, this is useful for displaying a chat session in a easier to read format, than the raw JSON.
 
 ```bash
-chatgpt-cli replaySession --session-file session.json
+chatgpt-cli replay-session --session-file session.json
 ```
 
-Help for replaySession command
+Help for replay-session command
 ```
 Usage:
-  chatgpt-cli replaySession [flags]
+  chatgpt-cli replay-session [flags]
 
 Flags:
   -h, --help                 help for replaySession
-  -s, --sessionFile string   File to replay a Session from
+  -s, --session-file string   File to replay a Session from
 
 Global Flags:
   -k, --api-key string   ChatGPT apiKey
@@ -154,23 +154,23 @@ Global Flags:
   -v, --verbose          verbose logging
 ```
 
-### listModels  
+### list-models  
 
 lists all models available to your account
 
 ```bash
-chatgpt-cli listModels
+chatgpt-cli list-models
 ```
 
-Help for listModels command
+Help for list-models command
 ```
  lists all models available to your account
 
 Usage:
-  chatgpt-cli listModels [flags]
+  chatgpt-cli list-models [flags]
 
 Flags:
-  -h, --help   help for listModels
+  -h, --help   help for list-models
 
 Global Flags:
   -k, --api-key string   ChatGPT apiKey

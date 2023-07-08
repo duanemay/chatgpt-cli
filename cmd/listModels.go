@@ -8,7 +8,7 @@ import (
 )
 
 var listModelsCmd = &cobra.Command{
-	Use:   "listModels",
+	Use:   "list-models",
 	Short: "lists all models available to your account",
 	Long:  "lists all models available to your account",
 	Run:   listModelsCmdRunner,
