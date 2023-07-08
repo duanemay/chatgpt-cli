@@ -14,24 +14,47 @@ brew install chatgpt-cli
 ### API Key
 To utilize the ChatGPT CLI, a ChatGPT API key is required. You can obtain one by signing up and creating an API key at [API keys](https://platform.openai.com/account/api-keys).
 
+It is recommended to create a file named: `.chatgpt-cli` in your home directory (or a directory you plan to run the cli). This file should contain your ChatGPT API key, and any other default settings you wish to use.
+
+```env
+API_KEY=sk-mysupersecretAPIkey
+```
+
 ### Flags, Environment Variables
 
 Configuration settings follow the precedence order: 
-flags > environment variables > configuration files > defaults
+```
+command line flags > environment variables > configuration files > defaults
+```
 
-|  Long            | Short | Config File/Environment Variable | Default                      | Description           |
-|------------------|-------|------------------------|----------------------------------------|-----------------------|
-| `--api-key`      | `-k`  | `CHATGPT_API_KEY`      | Error                                  | ChatGPT API Key       |
-| `--config`       | `-c`  | `CHATGPT_CONFIG`       | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load   |
-| `--verbose`      | `-v`  | `CHATGPT_VERBOSE`      | `false`                                | Verbose logging       |
-| `--eom`          |       | `CHATGPT_EOM`          | `\s`                                   | End of message marker |
-| `--eos`          |       | `CHATGPT_EOS`          | `\q`                                   | End of session marker |
-| `--session-file` | `-s`  | `CHATGPT_SESSION_FILE` | Generated                              | Session file          |
-| `--model`        | `-m`  | `CHATGPT_MODEL`        | `gpt-4`                                | Model to use          |
-| `--role`         |       | `CHATGPT_ROLE`         | `user`                                 | Role of User          |
-| `--temperature`  | `-t`  | `CHATGPT_TEMPERATURE`  | `1.0`                                  | Temperature: 0-2      |
-| `--max-tokens`   |       | `CHATGPT_MAX_TOKENS`   | `16`                                   | Max tokens            |
-| `--top-p`        |       | `CHATGPT_TOP_P`        | `1.0`                                  | Top P: 0-1            |
+A value specified in a configuration file overrides the default value.
+A value specified as an environment variable overrides the value in a configuration file.
+A value specified on the command line overrides all other settings. 
+
+
+All flags can be set in a configuration file, by uppercasing and converting any `-`s to `_`s. For example, `--api-key` can be set as `API_KEY`.  The configuration file is loaded from the current directory, then the user's home directory. The configuration file is named `.chatgpt-cli`.
+You can specify a different configuration file with the `--config` flag. Settings in a configuration file are specified as `KEY=VALUE` pairs, one per line. Lines beginning with `#` are treated as comments and ignored. 
+
+All flags can also be set as environment variables by prefixing with `CHATGPT_`, uppercasing, and converting `-` to `_`. For example, `--api-key` can be set as `CHATGPT_API_KEY`. 
+
+
+|  Long            | Short | Config File Key | Default                                | Description           |
+|------------------|-------|-----------------|----------------------------------------|-----------------------|
+| `--api-key`      | `-k`  | `API_KEY`       | Error                                  | ChatGPT API Key       |
+| `--config`       | `-c`  | `CONFIG`        | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load   |
+| `--verbose`      | `-v`  | `VERBOSE`       | `false`                                | Verbose logging       |
+| `--eom`          |       | `EOM`           | `\s`                                   | End of message marker |
+| `--eos`          |       | `EOS`           | `\q`                                   | End of session marker |
+| `--session-file` | `-s`  | `SESSION_FILE`  | Generated                              | Session file          |
+| `--model`        | `-m`  | `MODEL`         | `gpt-4`                                | Model to use          |
+| `--role`         |       | `ROLE`          | `user`                                 | Role of User          |
+| `--temperature`  | `-t`  | `TEMPERATURE`   | `1.0`                                  | Temperature: 0-2      |
+| `--max-tokens`   |       | `MAX_TOKENS`    | `16`                                   | Max tokens            |
+| `--top-p`        |       | `TOP_P`         | `1.0`                                  | Top P: 0-1            |
+
+Say you don't like `\s` and `\q` for the end of message and end of session markers. You can set them in your configuration file.
+
+## Usage
 
 ```bash
 chatgpt-cli is a CLI for ChatGPT
