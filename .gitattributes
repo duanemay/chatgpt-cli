@@ -1,0 +1,2 @@
+*.mp3 !text !filter !merge !diff
+*.mp4 !text !filter !merge !diff

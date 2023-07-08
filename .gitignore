@@ -1,0 +1,6 @@
+
+dist/
+.github_token
+.chatgpt-cli
+
+chatgpt-cli-*.json
