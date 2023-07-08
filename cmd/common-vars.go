@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/fatih/color"
 	"github.com/sashabaranov/go-openai"
-	"math"
 )
 
 var version = "0.0.0-dev"
@@ -35,7 +34,7 @@ const FlagTemperature = "temperature"
 
 var temperature float32
 
-const defaultMaxTokens = math.MaxInt
+const defaultMaxTokens = 0
 const FlagMaxTokens = "max-tokens"
 
 var maxTokens int

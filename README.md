@@ -49,7 +49,7 @@ All flags can also be set as environment variables by prefixing with `CHATGPT_`,
 | `--model`        | `-m`  | `MODEL`         | `gpt-4`                                | Model to use          |
 | `--role`         |       | `ROLE`          | `user`                                 | Role of User          |
 | `--temperature`  | `-t`  | `TEMPERATURE`   | `1.0`                                  | Temperature: 0-2      |
-| `--max-tokens`   |       | `MAX_TOKENS`    | `16`                                   | Max tokens            |
+| `--max-tokens`   |       | `MAX_TOKENS`    | `0`                                    | Max tokens: 8192      |
 | `--top-p`        |       | `TOP_P`         | `1.0`                                  | Top P: 0-1            |
 
 Say you don't like `\s` and `\q` for the end of message and end of session markers. You can set them in your configuration file.
