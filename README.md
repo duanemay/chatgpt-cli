@@ -33,25 +33,24 @@ Every flag can be set in a config file by converting it to uppercase and replaci
 
 You can select a different configuration file with the `--config` flag. Settings in a config file are specified as `KEY=VALUE` pairs, one per line. Lines starting with `#` are treated as comments and ignored.
 
-```
 The full list of available flags and corresponding environment variables:
 
-|Flag|Short|Config File Key|Default|Description|
-|--|--|--|--|--|
-|`--api-key`|`-k`|`API_KEY`|Error|ChatGPT API Key|
-|`--config`|`-c`|`CONFIG`|./.chatgpt-cli then $HOME/.chatgpt-cli|Config file to load|
-|`--verbose`|`-v`|`VERBOSE`|`false`|Verbose logging|
-|`--eom`||`EOM`|`s`|End of message marker|
-|`--eos`||`EOS`|`q`|End of session marker|
-|`--session-file`|`-s`|`SESSION_FILE`|Generated|Session file|
-|`--model`|`-m`|`MODEL`|`gpt-4`|Model to use|
-|`--role`| |`ROLE`|`user`|Role of User|
-|`--temperature`|`-m`|`TEMPERATURE`|`1.0`|Temperature: 0-2|
-|`--max-tokens`||`MAX_TOKENS`|`0`|Max tokens: 8192|
-|`--top-p`||`TOP_P`|`1.0`|Top P: 0-1|
+|Flag| Short |Config File Key| Default                                | Description                         |
+|--|-------|--|----------------------------------------|-------------------------------------|
+|`--api-key`| `-k`  |`API_KEY`| **Required**                           | ChatGPT API Key                     |
+|`--config`| `-c`  |`CONFIG`| ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load                 |
+|`--verbose`| `-v`  |`VERBOSE`| `false`                                | Verbose logging                     |
+|`--eom`|       |`EOM`| `s`                                    | End of message marker               |
+|`--eos`|       |`EOS`| `q`                                    | End of session marker               |
+|`--session-file`| `-s`  |`SESSION_FILE`| Generated                              | Session file                        |
+|`--no-write-session`|       |`NO_WRITE_SESSION`| false                                  | Do not write or update session file |
+|`--model`| `-m`  |`MODEL`| `gpt-4`                                | Model to use                        |
+|`--role`|       |`ROLE`| `user`                                 | Role of User                        |
+|`--temperature`| `-m`  |`TEMPERATURE`| `1.0`                                  | Temperature: 0-2                    |
+|`--max-tokens`|       |`MAX_TOKENS`| `0`                                    | Max tokens: 8192                    |
+|`--top-p`|       |`TOP_P`| `1.0`                                  | Top P: 0-1                          |
 
 For instance, if you want to change the end of message and end of session markers, you can modify them in your configuration file.
-```
 
 ## Usage
 

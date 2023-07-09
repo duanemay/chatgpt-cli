@@ -19,6 +19,10 @@ const FlagVerbose = "verbose"
 
 var verbose bool
 
+const FlagNoWriteSessionFile = "no-write-session"
+
+var noWriteSessionFile bool
+
 const defaultModel = openai.GPT4
 const FlagModel = "model"
 

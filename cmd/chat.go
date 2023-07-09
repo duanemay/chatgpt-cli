@@ -27,6 +27,7 @@ func init() {
 	chatCmd.Flags().Float32VarP(&temperature, FlagTemperature, "t", defaultTemperature, "temperature, between 0 and 2. Higher values make the output more random")
 	chatCmd.Flags().IntVar(&maxTokens, FlagMaxTokens, defaultMaxTokens, "number of tokens to generate = $")
 	chatCmd.Flags().Float32Var(&topP, FlagTopP, defaultTopP, "results of the tokens with top_p probability mass")
+	rootCmd.PersistentFlags().BoolVar(&noWriteSessionFile, FlagNoWriteSessionFile, false, "Do not write or update session file")
 	chatCmd.Flags().StringVarP(&sessionFile, FlagSessionFile, "s", "", "Continue a session from a file")
 	chatCmd.Flags().StringVar(&eomMarker, FlagEomMarker, defaultEomMarker, "Text to enter to mark the end of a message to send to ChatGPT")
 	chatCmd.Flags().StringVar(&eosMarker, FlagEosMarker, defaultEosMarker, "Text to enter to end of a session with ChatGPT")
@@ -38,10 +39,7 @@ func chatCmdRunner(_ *cobra.Command, _ []string) {
 	log.Debugf("chatCmd called")
 	detectTerminal()
 	if interactiveSession {
-		_, _ = narratorFmt.Printf("ChatGPT CLI v%s\n", version)
-		fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", model, role, temperature, maxTokens, topP)
-		fmt.Printf("- Press CTRL+D or '%s' on a separate line to send.\n", eomMarker)
-		fmt.Printf("- Press CTRL+C or enter '%s' on a separate line to terminate the session without sending.\n", eosMarker)
+		printBanner()
 	}
 	setupOpenAIClient()
 	setupSessionFile()
@@ -49,8 +47,7 @@ func chatCmdRunner(_ *cobra.Command, _ []string) {
 
 	for {
 		if interactiveSession {
-			_, _ = humanFmt.Printf("\nEnter Message")
-			fmt.Printf(" (%s to send; %s to exit):\n", eomMarker, eosMarker)
+			printPrompt()
 		}
 		var lines []string
 		for {
@@ -74,12 +71,27 @@ func chatCmdRunner(_ *cobra.Command, _ []string) {
 		if err := sendMessages(&chat, lines); err != nil {
 			log.WithError(err).Fatal()
 		}
-		writeSessionFile(chat)
+
+		if shouldWriteSession() {
+			writeSessionFile(chat)
+		}
 
 		if !interactiveSession {
 			break
 		}
 	}
+}
+
+func printPrompt() {
+	_, _ = humanFmt.Printf("\nEnter Message")
+	fmt.Printf(" (%s to send; %s to exit):\n", eomMarker, eosMarker)
+}
+
+func printBanner() {
+	_, _ = narratorFmt.Printf("ChatGPT CLI v%s\n", version)
+	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", model, role, temperature, maxTokens, topP)
+	fmt.Printf("- Press CTRL+D or '%s' on a separate line to send.\n", eomMarker)
+	fmt.Printf("- Press CTRL+C or enter '%s' on a separate line to terminate the session without sending.\n", eosMarker)
 }
 
 // sendMessages sends messages to ChatGPT and prints the response

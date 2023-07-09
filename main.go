@@ -1,6 +1,8 @@
 package main
 
-import "github.com/duanemay/chatgpt-cli/cmd"
+import (
+	"github.com/duanemay/chatgpt-cli/cmd"
+)
 
 func main() {
 	cmd.Execute()

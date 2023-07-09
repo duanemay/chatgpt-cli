@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
 	"time"
@@ -29,10 +28,9 @@ func detectTerminal() bool {
 
 // setupSessionFile reads the sessionFile if provided, or creates a new one
 func setupSessionFile() {
-	if !viper.IsSet(FlagSessionFile) {
-		sessionId := time.Now().Unix()
-		sessionFile = fmt.Sprintf("chatgpt-cli-%d.json", sessionId)
-		if interactiveSession {
+	if sessionFile == "" {
+		sessionFile = "chatgpt-cli-" + time.Now().UTC().Format(time.RFC3339) + ".json"
+		if interactiveSession && shouldWriteSession() {
 			fmt.Printf("  to continue with this session, use: --%s %s\n", FlagSessionFile, sessionFile)
 		}
 		chat = openai.ChatCompletionRequest{
@@ -53,6 +51,10 @@ func setupSessionFile() {
 			fmt.Printf("  continuing session from file: %s\n", sessionFile)
 		}
 	}
+}
+
+func shouldWriteSession() bool {
+	return !noWriteSessionFile
 }
 
 func loadSessionFile() {
