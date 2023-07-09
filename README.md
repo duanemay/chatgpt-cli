@@ -6,13 +6,20 @@ The ChatGPT CLI allows you to interact with ChatGPT directly from your command l
 
 ### Simple Interactive Chat
 
-![Simple chat](docs/translation-demo.gif)
+![Translation Demo](docs/translation-demo.gif)
+
+### Ask a Question, non-Interactively
+
+```bash
+{ echo "What is the largest file in this directory?"; ls -l } | chatgpt-cli chat
+```
 
 ### Improving README, non-Interactively
 
 ```bash
 echo "Rewrite this README file as a user guide. Make it easy to read and informative. Use a helpful and clear style" \
   | chatgpt-cli chat < README.md > README-new.md
+mv README-new.md README.md
 ```
 
 ### Editing a directory full of notes, non-Interactively
@@ -24,16 +31,15 @@ for file in notes/*.md; do
     printf "Use Markdown format. "
     printf "Revise the text of the note below to use a clear and informative style. "
     printf "Use newlines to keep line length less than 120 characters.\n\n"
-  } >"${file}.req"
+    cat "${file}"
+  } | chatgpt-cli chat > "${file}.new"
 
-  chatgpt-cli chat <"${file}.req" >"${file}.new"
   if [ $? -ne 0 ]; then
     printf "  Request Failed: '%s'\n" "${file}"
     rm "${file}.new"
   else
     mv "${file}.new" "${file}"
   fi
-  rm "${file}.req"
 done
 ```
 
