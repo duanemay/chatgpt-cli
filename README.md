@@ -1,6 +1,6 @@
-# ChatGPT Command-Line Interface (CLI)
+# User Guide - ChatGPT Command-Line Interface (CLI)
 
-ChatGPT CLI offers an efficient way to communicate with ChatGPT directly from the command line.
+The ChatGPT CLI allows you to interact with ChatGPT directly from your command line, offering an efficient platform for real-time communication. This user guide will provide you with simple, straightforward instructions on how to install, set up, and effectively use the CLI.
 
 ## Examples
 
@@ -16,7 +16,6 @@ echo "Rewrite this README file as a user guide. Make it easy to read and informa
 ```
 
 ### Editing a directory full of notes, non-Interactively
-
 ```bash
 for file in notes/*.md; do
   printf "\nEditing '%s'\n============================\n" "$file"
@@ -40,34 +39,34 @@ done
 
 ## Installation
 
-Using brew to install:
+To install ChatGPT CLI using Homebrew:
 
 ```bash
 brew tap duanemay/tap
 brew install chatgpt-cli
 ```
 
-## Setting Up
+## Initial Set Up
 
-You need to set up a ChatGPT API key to use the CLI. Sign up on [OpenAI platform](https://platform.openai.com/account/api-keys) to generate one. 
+To use the ChatGPT CLI, you'll need a ChatGPT API key. You can generate this key by signing up on the [OpenAI platform](https://platform.openai.com/account/api-keys).
 
-It is recommended to create a `.chatgpt-cli` file in your home directory (or the directory where you'll run the CLI), and put your ChatGPT API key there, together with any other default settings you wish to use.
+It is recommended to create a `.chatgpt-cli` file in your home directory or the directory where you'll run the CLI. Inside this file, include your API key alongside additional default settings you wish to use.
+
+Example:
 
 ```env
 API_KEY=sk-mysupersecretAPIkey
 ```
 
-## Flags and Environment Variables
+## Configuration Settings
 
-The configuration settings precedence order is:
+The priority order for the configuration settings is as follows:
 
 ```
-command line flags > environment variables > configuration files > defaults
+Command line flags > Environment Variables > Configuration files > Defaults
 ```
 
-Every flag can be set in a config file by converting it to uppercase and replacing any `-` with `_`. For example, `--api-key` can be set as `API_KEY`. The config file is loaded from the current directory, then from the user's home directory. The configuration file is named `.chatgpt-cli`.
-
-You can select a different configuration file with the `--config` flag. Settings in a config file are specified as `KEY=VALUE` pairs, one per line. Lines starting with `#` are treated as comments and ignored.
+Each flag can be set in a configuration file, by changing it to uppercase and replacing `-` with `_`.
 
 The full list of available flags and corresponding environment variables:
 
@@ -86,61 +85,68 @@ The full list of available flags and corresponding environment variables:
 |`--max-tokens`|       |`MAX_TOKENS`| `0`                                    | Max tokens: 8192                    |
 |`--top-p`|       |`TOP_P`| `1.0`                                  | Top P: 0-1                          |
 
-For instance, if you want to change the end of message and end of session markers, you can modify them in your configuration file.
+For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
+
+You can select a different configuration file using `--config` flag. Each config file should specify settings as `KEY=VALUE` pairs, with each pair on a separate line. Lines commencing with `#` are considered comments and ignored.
 
 ## Usage
 
-The basic `chatgpt-cli` command usage:
+The basic command to use `chatgpt-cli` is as follows:
 
 ```bash
 chatgpt-cli [command]
 ```
 
-Available commands include:
+The available commands are as follows:
 
-- `chat`: Enter a chat session with ChatGPT
-- `completion`: Generate the autocompletion script for the specified shell
-- `help`: Help about any command
-- `list-models`: Lists all models available to your account
-- `replay-session`: Replay a chat session from a saved file
-- `version`: Displays version information
+1. `chat`: Start a chat session with ChatGPT.
+2. `completion`: Generate the autocomplete script for your chosen shell.
+3. `help`: Seek help regarding any command.
+4. `list-models`: Retrieve a list of all models available to your account.
+5. `replay-session`: Replay a chat session from a previously saved file.
+6. `version`: Get version information.
 
-### chat  
+### Chatting
 
-This command initiates a chat session with ChatGPT. You will be prompted to enter a message. Type in desired texts which could be multi-line to send. When your message is complete, you can either type CTRL+D or `\s` on a separate line to send. You can change the default end of message marker with the `--eom` flag.
+Initiate a chat session with ChatGPT using the `chat` command:
 
-ChatGPT will then respond with a message. You can continue the chat by inputting another message. 
+```bash
+chatgpt-cli chat
+```
 
-To exit the chat session, you can either type in CTRL+C or `\q` on a separate line. Any text inputted before exiting would not be sent. The default end of session marker can also be changed using the `--eos` flag.
+You'll be prompted to input your message, which can span multiple lines. Send your message with CTRL+D or by entering `\s` as a separate line. The default end of the message marker can be changed with the `--eom` flag.
 
-The chat session will be saved in a session file. You can resume this session by specifying the file using the `--session-file` flag.
+Continue your conversation with ChatGPT by inputting a new message once you receive a response.
 
-For instance:
+Exiting the chat is made possible by inputting CTRL+C or `\q`. Note that any text entered before exiting won't be sent. The default end of session marker can be changed with the `--eos` flag.
+
+All chat sessions are saved in a session file, for which the `--session-file` flag can specify the file of your choice:
+
 ```bash
 chatgpt-cli chat --session-file session.json
 ```
 
-You can also set Model, Role, Temperature, Max Tokens, and Top P with the `--model`, `--role`, `--temperature`, `--max-tokens`, and `--top-p` flags respectively. These can be changed when resuming a session with the `--session-file` flag.
+The `--model`, `--role`, `--temperature`, `--max-tokens`, and `--top-p` flags allow for individual configuration of the Model, Role, Temperature, Max Tokens, and Top P respectively.
 
-### replay-session
+### Replaying a Session
 
-This command replays a chat session from the saved file, a great way to revisit a chat session in a more readable format than the raw JSON.
+Replaying a chat session lets you revisit a previous chat in a more readable format than the raw JSON. Use the `replay-session` command:
 
 ```bash
 chatgpt-cli replay-session --session-file session.json
 ```
 
-### list-models
+### Listing Models
 
-This command lists all models available for your account.
+`list-models` retrieves a list of all available models related to your account:
 
 ```bash
 chatgpt-cli list-models
 ```
 
-### version
+### Checking the Version
 
-This command displays version information.
+Fetch information about the CLI's version using `version`:
 
 ```bash
 chatgpt-cli version
@@ -148,13 +154,13 @@ chatgpt-cli version
 
 ## Build and Release
 
-For a trial run, do a dry-run of the deployment process. This can be achieved by running a command with few flags that will hinder you from releasing it on GitHub.
+For a dry-run of the deployment process, you can run the following:
 
 ```bash
 goreleaser --snapshot --skip-publish --clean
 ```
 
-After adding the GitHub token in `./.github_token`, run:
+For a full deployment, you'll need to add a GitHub token to the `./.github_token` file, then run the following:
 
 ```bash
 goreleaser --clean
