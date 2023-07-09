@@ -2,6 +2,42 @@
 
 ChatGPT CLI offers an efficient way to communicate with ChatGPT directly from the command line.
 
+## Examples
+
+### Simple Interactive Chat
+
+![Simple chat](docs/translation-demo.gif)
+
+### Improving README, non-Interactively
+
+```bash
+echo "Rewrite this README file as a user guide. Make it easy to read and informative. Use a helpful and clear style" \
+  | chatgpt-cli chat < README.md > README-new.md
+```
+
+### Editing a directory full of notes, non-Interactively
+
+```bash
+for file in notes/*.md; do
+  printf "\nEditing '%s'\n============================\n" "$file"
+  {
+    printf "Revise my notes. "
+    printf "Use Markdown format. "
+    printf "Revise the text of the note below to use a clear and informative style. "
+    printf "Use newlines to keep line length less than 120 characters.\n\n"
+  } >"${file}.req"
+
+  chatgpt-cli chat <"${file}.req" >"${file}.new"
+  if [ $? -ne 0 ]; then
+    printf "  Request Failed: '%s'\n" "${file}"
+    rm "${file}.new"
+  else
+    mv "${file}.new" "${file}"
+  fi
+  rm "${file}.req"
+done
+```
+
 ## Installation
 
 Using brew to install:
@@ -122,34 +158,5 @@ After adding the GitHub token in `./.github_token`, run:
 
 ```bash
 goreleaser --clean
-```
-
-##### Examples for use
-
-###### Improving README
-```bash
-echo "Rewrite this README file as a user guide. Make it easy to read and informative. Use a helpful and clear style" \
-  | chatgpt-cli chat < README.md > README-new.md
-```
-
-###### Editing a directory full of notes
-```bash
-for file in notes/*.md; do
-  printf "\nEditing '%s'\n============================\n" "$file"
-  {
-    printf "Revise my notes. "
-    printf "Use Markdown format. "
-    printf "Revise the text of the note below to use a clear and informative style. "
-    printf "Use newlines to keep line length less than 120 characters.\n\n"
-  } >"${file}.req"
-
-  chatgpt-cli chat <"${file}.req" >"${file}.new"
-  if [ $? -ne 0 ]; then
-    printf "  Request Failed: '%s'\n" "${file}"
-    rm "${file}.new"
-  else
-    mv "${file}.new" "${file}"
-  fi
-  rm "${file}.req"
-done
+brew upgrade
 ```
