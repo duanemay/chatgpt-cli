@@ -2,8 +2,12 @@ package main
 
 import (
 	"github.com/duanemay/chatgpt-cli/cmd"
+	"os"
 )
 
 func main() {
-	cmd.Execute()
+	err := cmd.NewRootCmd().Execute()
+	if err != nil {
+		os.Exit(1)
+	}
 }

@@ -1,6 +1,18 @@
 
+#Build files
+chatgpt-cli
 dist/
+
+#github token for goreleaser
 .github_token
+
+#Default config
 .chatgpt-cli
 
+#Session files
 chatgpt-cli-*.json
+
+#Test Coverage files
+.coverage-report.out
+coverage.html
+

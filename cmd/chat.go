@@ -12,111 +12,124 @@ import (
 	"strings"
 )
 
-var chatCmd = &cobra.Command{
-	Use:   "chat",
-	Short: "Enter a chat session with ChatGPT",
-	Long:  "Enter a chat session with ChatGPT",
-	Run:   chatCmdRunner,
-}
-
-func init() {
-	rootCmd.AddCommand(chatCmd)
-
-	chatCmd.Flags().StringVarP(&model, FlagModel, "m", defaultModel, "ChatGPT Model")
-	chatCmd.Flags().StringVarP(&role, FlagRole, "r", defaultRole, "ChatGPT Role")
-	chatCmd.Flags().Float32VarP(&temperature, FlagTemperature, "t", defaultTemperature, "temperature, between 0 and 2. Higher values make the output more random")
-	chatCmd.Flags().IntVar(&maxTokens, FlagMaxTokens, defaultMaxTokens, "number of tokens to generate = $")
-	chatCmd.Flags().Float32Var(&topP, FlagTopP, defaultTopP, "results of the tokens with top_p probability mass")
-	rootCmd.PersistentFlags().BoolVar(&noWriteSessionFile, FlagNoWriteSessionFile, false, "Do not write or update session file")
-	chatCmd.Flags().StringVarP(&sessionFile, FlagSessionFile, "s", "", "Continue a session from a file")
-	chatCmd.Flags().StringVar(&eomMarker, FlagEomMarker, defaultEomMarker, "Text to enter to mark the end of a message to send to ChatGPT")
-	chatCmd.Flags().StringVar(&eosMarker, FlagEosMarker, defaultEosMarker, "Text to enter to end of a session with ChatGPT")
-
-	_ = chatCmd.MarkPersistentFlagRequired(FlagApiKey)
-}
-
-func chatCmdRunner(_ *cobra.Command, _ []string) {
-	log.Debugf("chatCmd called")
-	detectTerminal()
-	if interactiveSession {
-		printBanner()
+func NewChatCmd(rootFlags *RootFlags) *cobra.Command {
+	chatFlags := NewChatFlags()
+	chatContext := NewChatContext()
+	var cmd = &cobra.Command{
+		Use:   "chat",
+		Short: "Enter a chat session with ChatGPT",
+		Long:  "Enter a chat session with ChatGPT",
+		RunE:  chatCmdRun(rootFlags, chatFlags, chatContext),
 	}
-	setupOpenAIClient()
-	setupSessionFile()
-	reader := bufio.NewReader(os.Stdin)
+	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
 
-	for {
-		if interactiveSession {
-			printPrompt()
+	AddModelFlag(&chatFlags.model, cmd.PersistentFlags())
+	AddRoleFlag(&chatFlags.role, cmd.PersistentFlags())
+	AddSessionFileFlag(&chatFlags.sessionFile, cmd.PersistentFlags())
+	AddSkipWriteSessionFileFlag(&chatFlags.skipWriteSessionFile, cmd.PersistentFlags())
+	AddEomMarkerFlag(&chatFlags.eomMarker, cmd.PersistentFlags())
+	AddEosMarkerFlag(&chatFlags.eosMarker, cmd.PersistentFlags())
+	AddTemperatureFlag(&chatFlags.temperature, cmd.PersistentFlags())
+	AddMaxTokensFlag(&chatFlags.maxTokens, cmd.PersistentFlags())
+	AddTopPFlag(&chatFlags.topP, cmd.PersistentFlags())
+	_ = cmd.MarkPersistentFlagRequired(FlagApiKey)
+
+	return cmd
+}
+
+func chatCmdRun(rootFlags *RootFlags, chatFlags *ChatFlags, chatContext *ChatContext) func(cmd *cobra.Command, args []string) error {
+	return func(_ *cobra.Command, _ []string) error {
+		log.Debugf("chatCmd called")
+		chatContext.InteractiveSession = detectTerminal()
+		if chatContext.InteractiveSession {
+			printBanner(chatFlags)
 		}
-		var lines []string
-		for {
-			line, err := reader.ReadString('\n')
-			if err != nil && err != io.EOF {
-				log.WithError(err).Fatal()
-			} else if err == io.EOF {
-				break
-			}
-
-			trimmedLine := strings.TrimSpace(line)
-			if trimmedLine == eomMarker {
-				break
-			} else if trimmedLine == eosMarker {
-				return
-			}
-
-			lines = append(lines, line)
-		}
-
-		if err := sendMessages(&chat, lines); err != nil {
+		client, err := setupOpenAIClient(rootFlags.apikey)
+		if err != nil {
 			log.WithError(err).Fatal()
 		}
 
-		if shouldWriteSession() {
-			writeSessionFile(chat)
-		}
+		chatCompletionRequest := loadOrCreateChatCompletionRequest(chatFlags, chatContext)
+		reader := bufio.NewReader(os.Stdin)
 
-		if !interactiveSession {
-			break
+		for {
+			if chatContext.InteractiveSession {
+				printPrompt(chatFlags.eomMarker, chatFlags.eosMarker)
+			}
+			var lines []string
+			for {
+				line, err := reader.ReadString('\n')
+				log.WithError(err).Debugf("readString returned")
+				if err != nil && err != io.EOF {
+					log.WithError(err).Fatal()
+				} else if err == io.EOF {
+					break
+				}
+
+				trimmedLine := strings.TrimSpace(line)
+				if trimmedLine == chatFlags.eomMarker {
+					break
+				} else if trimmedLine == chatFlags.eosMarker {
+					return nil
+				}
+
+				lines = append(lines, line)
+			}
+			if len(lines) == 0 {
+				log.Warning("No Message to Send")
+				continue
+			}
+
+			if err := sendMessages(chatFlags, chatContext, chatCompletionRequest, client, lines); err != nil {
+				log.WithError(err).Fatal()
+			}
+
+			if shouldWriteSession(chatFlags) {
+				writeSessionFile(chatFlags, chatCompletionRequest)
+			}
+
+			if !chatContext.InteractiveSession {
+				break
+			}
 		}
+		return nil
 	}
 }
 
-func printPrompt() {
+func printPrompt(eomMarker, eosMarker string) {
 	_, _ = humanFmt.Printf("\nEnter Message")
 	fmt.Printf(" (%s to send; %s to exit):\n", eomMarker, eosMarker)
 }
 
-func printBanner() {
+func printBanner(f *ChatFlags) {
 	_, _ = narratorFmt.Printf("ChatGPT CLI v%s\n", version)
-	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", model, role, temperature, maxTokens, topP)
-	fmt.Printf("- Press CTRL+D or '%s' on a separate line to send.\n", eomMarker)
-	fmt.Printf("- Press CTRL+C or enter '%s' on a separate line to terminate the session without sending.\n", eosMarker)
+	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", f.model, f.role, f.temperature, f.maxTokens, f.topP)
+	fmt.Printf("- Press CTRL+D or '%s' on a separate line to send.\n", f.eomMarker)
+	fmt.Printf("- Press CTRL+C or enter '%s' on a separate line to terminate the session without sending.\n", f.eosMarker)
 }
 
 // sendMessages sends messages to ChatGPT and prints the response
-func sendMessages(chat *openai.ChatCompletionRequest, lines []string) error {
-	if interactiveSession {
+func sendMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequest *openai.ChatCompletionRequest, client *openai.Client, lines []string) error {
+	if chatContext.InteractiveSession {
 		_, _ = narratorFmt.Println("\nSending to ChatGPT, please wait...")
 	}
 
-	chat.Messages = append(chat.Messages, openai.ChatCompletionMessage{
-		Role:    role,
+	chatCompletionRequest.Messages = append(chatCompletionRequest.Messages, openai.ChatCompletionMessage{
+		Role:    f.role,
 		Content: strings.Join(lines, "\n"),
 	})
-	resp, err := client.CreateChatCompletion(context.Background(), *chat)
-
+	resp, err := client.CreateChatCompletion(context.Background(), *chatCompletionRequest)
 	if err != nil {
 		return err
 	}
 
 	for _, choice := range resp.Choices {
-		if interactiveSession {
+		if chatContext.InteractiveSession {
 			_, _ = aiFmt.Printf("\nChatGPT response:\n")
 		}
 		fmt.Printf("%s\n", choice.Message.Content)
 	}
-	chat.Messages = append(chat.Messages, resp.Choices[0].Message)
+	chatCompletionRequest.Messages = append(chatCompletionRequest.Messages, resp.Choices[0].Message)
 
 	return nil
 }

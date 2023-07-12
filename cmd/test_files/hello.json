@@ -1,0 +1,15 @@
+{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "say hello in Japanese\n"
+    },
+    {
+      "role": "assistant",
+      "content": "こんにちは"
+    }
+  ],
+  "temperature": 1,
+  "top_p": 1
+}
