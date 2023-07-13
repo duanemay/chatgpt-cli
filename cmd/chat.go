@@ -97,12 +97,12 @@ func chatCmdRun(rootFlags *RootFlags, chatFlags *ChatFlags, chatContext *ChatCon
 }
 
 func printPrompt(eomMarker, eosMarker string) {
-	_, _ = humanFmt.Printf("\nEnter Message")
+	_, _ = HumanFmt.Printf("\nEnter Message")
 	fmt.Printf(" (%s to send; %s to exit):\n", eomMarker, eosMarker)
 }
 
 func printBanner(f *ChatFlags) {
-	_, _ = narratorFmt.Printf("ChatGPT CLI v%s\n", version)
+	_, _ = NarratorFmt.Printf("ChatGPT CLI v%s\n", version)
 	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", f.model, f.role, f.temperature, f.maxTokens, f.topP)
 	fmt.Printf("- Press CTRL+D or '%s' on a separate line to send.\n", f.eomMarker)
 	fmt.Printf("- Press CTRL+C or enter '%s' on a separate line to terminate the session without sending.\n", f.eosMarker)
@@ -125,7 +125,7 @@ func sendMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequest 
 
 	for _, choice := range resp.Choices {
 		if chatContext.InteractiveSession {
-			_, _ = aiFmt.Printf("\nChatGPT response:\n")
+			_, _ = AiFmt.Printf("\nChatGPT response:\n")
 		}
 		fmt.Printf("%s\n", choice.Message.Content)
 	}

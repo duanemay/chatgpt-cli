@@ -72,7 +72,9 @@ var _ = Describe("Root Command", func() {
 
 	It("should set up verbose logger from ENV", func() {
 		_ = os.Setenv("CHATGPT_VERBOSE", "true")
-		defer os.Unsetenv("CHATGPT_VERBOSE")
+		defer func() {
+			_ = os.Unsetenv("CHATGPT_VERBOSE")
+		}()
 
 		output, _ := ExecuteTest(rootCmd, []string{"version"}, "")
 		Ω(rootCmd.PersistentFlags().GetBool("verbose")).To(Equal(true))
@@ -113,7 +115,9 @@ var _ = Describe("Root Command", func() {
 	Context("should honor priority order of config", func() {
 		It("should prefer command line flags over others", func() {
 			_ = os.Setenv("CHATGPT_API_KEY", "22")
-			defer os.Unsetenv("CHATGPT_API_KEY")
+			defer func() {
+				_ = os.Unsetenv("CHATGPT_API_KEY")
+			}()
 
 			_, _ = ExecuteTest(rootCmd, []string{"version", "-k", "1", "-c", "test_files/orderFlags.properties"}, "")
 			Ω(rootCmd.PersistentFlags().GetString("config")).To(Equal("test_files/orderFlags.properties"))
@@ -122,7 +126,9 @@ var _ = Describe("Root Command", func() {
 
 		It("should prefer env vars over config file", func() {
 			_ = os.Setenv("CHATGPT_API_KEY", "22")
-			defer os.Unsetenv("CHATGPT_API_KEY")
+			defer func() {
+				_ = os.Unsetenv("CHATGPT_API_KEY")
+			}()
 
 			_, _ = ExecuteTest(rootCmd, []string{"version", "-c", "test_files/orderFlags.properties"}, "")
 			Ω(rootCmd.PersistentFlags().GetString("config")).To(Equal("test_files/orderFlags.properties"))

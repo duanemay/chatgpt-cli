@@ -36,9 +36,9 @@ func replaySessionCmdRun(f *ReplaySessionFlags) func(cmd *cobra.Command, args []
 		chatCompletionRequest := loadSessionFile(f.sessionFile)
 		for i, message := range chatCompletionRequest.Messages {
 			if i%2 == 0 {
-				humanFmt.Printf("\n%s:\n", message.Role)
+				_, _ = HumanFmt.Printf("\n%s:\n", message.Role)
 			} else {
-				aiFmt.Printf("%s:\n", message.Role)
+				_, _ = AiFmt.Printf("%s:\n", message.Role)
 			}
 			fmt.Printf("%s\n", message.Content)
 		}

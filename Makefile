@@ -5,6 +5,9 @@ all: chatgpt-cli
 chatgpt-cli: **/*.go
 	goreleaser build --snapshot --clean --single-target --output .
 
+**/*.go:
+	@# noop
+
 clean:
 	rm -rf dist/ coverage.html .coverage-report.out chatgpt-cli
 

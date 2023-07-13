@@ -29,7 +29,7 @@ func ExecuteTest(cmd *cobra.Command, args []string, input string) (output string
 	cmd.SetErr(writer)
 	log.SetOutput(writer)
 
-	// copy pipe output to a buffer so we can read it later
+	// copy pipe output to a buffer, so we can read it later
 	out := make(chan string)
 	wg := new(sync.WaitGroup)
 	wg.Add(1)
