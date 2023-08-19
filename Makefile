@@ -1,6 +1,7 @@
 .PHONY: all clean test setup release-patch release-minor release-major
 module := github.com/duanemay/chatgpt-cli
 all: chatgpt-cli
+
 ifeq ($(OS),Windows_NT)
     uname_S := Windows
 else
@@ -37,17 +38,20 @@ setup:
 	brew install caarlos0/tap/svu
 	brew install goreleaser/tap/goreleaser
 
+re-release-novalidate:
+	goreleaser release --clean --skip-validate
+
 release-patch:
-	git tag "$(svu patch)"
+	git tag "$(shell svu patch)"
 	git push --tags
 	goreleaser release --clean
 
 release-minor:
-	git tag "$(svu minor)"
+	git tag "$(shell svu minor)"
 	git push --tags
 	goreleaser release --clean
 
 release-major:
-	git tag "$(svu major)"
+	git tag "$(shell svu major)"
 	git push --tags
 	goreleaser release --clean
