@@ -2,7 +2,7 @@ package cmd_test
 
 import (
 	"bytes"
-	"github.com/fatih/color"
+	"github.com/pterm/pterm"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"io"
@@ -23,8 +23,7 @@ func ExecuteTest(cmd *cobra.Command, args []string, input string) (output string
 	reader, writer, err := os.Pipe()
 	os.Stdout = writer
 	os.Stderr = writer
-	color.Output = writer
-	color.Error = writer
+	pterm.SetDefaultOutput(writer)
 	cmd.SetOut(writer)
 	cmd.SetErr(writer)
 	log.SetOutput(writer)

@@ -8,8 +8,7 @@ import (
 const (
 	FlagApiKey               = "api-key"
 	FlagConfigFile           = "config"
-	FlagEomMarker            = "eom"
-	FlagEosMarker            = "eos"
+	FlagInitialSystemMessage = "system-message"
 	FlagMaxTokens            = "max-tokens"
 	FlagModel                = "model"
 	FlagSkipWriteSessionFile = "skip-write-session"
@@ -21,13 +20,12 @@ const (
 )
 
 const (
-	defaultEomMarker   = "\\s"
-	defaultEosMarker   = "\\q"
-	defaultMaxTokens   = 0
-	defaultModel       = openai.GPT4
-	defaultRole        = openai.ChatMessageRoleUser
-	defaultTemperature = 1.0
-	defaultTopP        = 1.0
+	defaultMaxTokens     = 0
+	defaultModel         = openai.GPT4
+	defaultRole          = openai.ChatMessageRoleUser
+	defaultTemperature   = 1.0
+	defaultTopP          = 1.0
+	defaultSystemMessage = ""
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -65,12 +63,8 @@ func AddSkipWriteSessionFileFlag(b *bool, flags *pflag.FlagSet) {
 	flags.BoolVar(b, FlagSkipWriteSessionFile, false, "Do not write or update session file")
 }
 
-func AddEomMarkerFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVar(str, FlagEomMarker, defaultEomMarker, "Text to enter to mark the end of a message to send to ChatGPT")
-}
-
-func AddEosMarkerFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVar(str, FlagEosMarker, defaultEosMarker, "Text to enter to mark the end of a message from ChatGPT")
+func AddInitialSystemMessageFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVar(str, FlagInitialSystemMessage, defaultSystemMessage, "Initial System message sent to ChatGPT")
 }
 
 func AddTemperatureFlag(f *float32, flags *pflag.FlagSet) {

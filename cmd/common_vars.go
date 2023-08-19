@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"github.com/fatih/color"
+	"github.com/pterm/pterm"
 )
 
 var (
-	HumanFmt    = color.New(color.FgHiRed).Add(color.Bold)
-	AiFmt       = color.New(color.FgHiGreen).Add(color.Bold)
-	NarratorFmt = color.New(color.FgHiWhite).Add(color.Bold)
+	ErrorFmt = pterm.NewStyle(pterm.FgLightRed, pterm.Bold)
+	HumanFmt = pterm.NewStyle(pterm.FgLightRed, pterm.Bold)
+	AiFmt    = pterm.NewStyle(pterm.FgLightGreen, pterm.Bold)
+	TitleFmt = pterm.NewStyle(pterm.FgLightWhite, pterm.Bold)
 )
 
 var version = "0.0.0-dev"

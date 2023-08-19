@@ -1,6 +1,11 @@
 .PHONY: all clean test setup release-patch release-minor release-major
 module := github.com/duanemay/chatgpt-cli
 all: chatgpt-cli
+ifeq ($(OS),Windows_NT)
+    uname_S := Windows
+else
+    uname_S := $(shell uname -s)
+endif
 
 chatgpt-cli: **/*.go
 	goreleaser build --snapshot --clean --single-target --output .
@@ -22,7 +27,11 @@ cov:
 		--coverpkg=${module},${module}/cmd \
  		--coverprofile=.coverage-report.out
 	go tool cover -html=./.coverage-report.out -o coverage.html
+ifeq ($(uname_S),Darwin)
 	open coverage.html
+else
+	@echo To view coverage: open coverage.html
+endif
 
 setup:
 	brew install caarlos0/tap/svu

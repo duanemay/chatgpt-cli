@@ -76,20 +76,19 @@ Each flag can be set in a configuration file, by changing it to uppercase and re
 
 The full list of available flags and corresponding environment variables:
 
-| Flag                 | Short | Config File Key    | Default                                | Description                         |
-|----------------------|-------|--------------------|----------------------------------------|-------------------------------------|
-| `--api-key`          | `-k`  | `API_KEY`          | **Required**                           | ChatGPT API Key                     |
-| `--config`           | `-c`  | `CONFIG`           | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load                 |
-| `--verbose`          | `-v`  | `VERBOSE`          | `false`                                | Verbose logging                     |
-| `--eom`              |       | `EOM`              | `s`                                    | End of message marker               |
-| `--eos`              |       | `EOS`              | `q`                                    | End of session marker               |
-| `--session-file`     | `-s`  | `SESSION_FILE`     | Generated                              | Session file                        |
-| `--no-write-session` |       | `NO_WRITE_SESSION` | false                                  | Do not write or update session file |
-| `--model`            | `-m`  | `MODEL`            | `gpt-4`                                | Model to use                        |
-| `--role`             |       | `ROLE`             | `user`                                 | Role of User                        |
-| `--temperature`      | `-m`  | `TEMPERATURE`      | `1.0`                                  | Temperature: 0-2                    |
-| `--max-tokens`       |       | `MAX_TOKENS`       | `0`                                    | Max tokens: 8192                    |
-| `--top-p`            |       | `TOP_P`            | `1.0`                                  | Top P: 0-1                          |
+| Flag                 | Short | Config File Key | Default                                | Description                                |
+|----------------------|-------|---------------|----------------------------------------|--------------------------------------------|
+| `--api-key`          | `-k`  | `API_KEY`     | **Required**                           | ChatGPT API Key                            |
+| `--config`           | `-c`  | `CONFIG`      | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load                        |
+| `--verbose`          | `-v`  | `VERBOSE`     | `false`                                | Verbose logging                            |
+| `--system-message`   |       |               | ``                                    | Initial System message sent to ChatGPT     |
+| `--session-file`     | `-s`  | `SESSION_FILE` | Generated                              | Session file                               |
+| `--no-write-session` |       | `NO_WRITE_SESSION` | false                                  | Do not write or update session file        |
+| `--model`            | `-m`  | `MODEL`       | `gpt-4`                                | Model to use                               |
+| `--role`             |       | `ROLE`        | `user`                                 | Role of User                               |
+| `--temperature`      | `-m`  | `TEMPERATURE` | `1.0`                                  | Temperature: 0-2                           |
+| `--max-tokens`       |       | `MAX_TOKENS`  | `0`                                    | Max tokens: 8192                           |
+| `--top-p`            |       | `TOP_P`       | `1.0`                                  | Top P: 0-1                                 |
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 
@@ -120,11 +119,11 @@ Initiate a chat session with ChatGPT using the `chat` command:
 chatgpt-cli chat
 ```
 
-You'll be prompted to input your message, which can span multiple lines. Send your message with CTRL+D or by entering `\s` as a separate line. The default end of the message marker can be changed with the `--eom` flag.
+You'll be prompted to input your message, which can span multiple lines. Send your message with TAB or CTRL+C.
 
 Continue your conversation with ChatGPT by inputting a new message once you receive a response.
 
-Exiting the chat is made possible by inputting CTRL+C or `\q`. Note that any text entered before exiting won't be sent. The default end of session marker can be changed with the `--eos` flag.
+Exiting the chat is made possible by inputting CTRL+C or TAB with no message. 
 
 All chat sessions are saved in a session file, for which the `--session-file` flag can specify the file of your choice:
 
@@ -133,6 +132,12 @@ chatgpt-cli chat --session-file session.json
 ```
 
 The `--model`, `--role`, `--temperature`, `--max-tokens`, and `--top-p` flags allow for individual configuration of the Model, Role, Temperature, Max Tokens, and Top P respectively.
+
+A system prompt can be set by using the `--system-message` flag:
+
+```bash
+chatgpt-cli chat --system-message "You are a captivating storyteller who brings history to life by narrating the events, people, and cultures of the past."
+```
 
 ### Replaying a Session
 

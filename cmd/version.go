@@ -17,5 +17,5 @@ func NewVersionCmd() *cobra.Command {
 
 func versionCmdRunner(_ *cobra.Command, _ []string) {
 	log.Debugf("versionCmd called")
-	_, _ = NarratorFmt.Printf("ChatGPT CLI v%s\n", version)
+	TitleFmt.Printf("ChatGPT CLI v%s\n", version)
 }
