@@ -26,8 +26,8 @@ var _ = Describe("List Models Command", func() {
 		Ω(output).To(ContainSubstring("OpenAI API Key not set\n"))
 	})
 
-	PIt("should list models", func() {
-		output, _ := ExecuteTest(rootCmd, []string{commandName, "-v", "--config", "test_files/empty.properties"}, "")
+	It("should list models", func() {
+		output, _ := ExecuteTest(rootCmd, []string{commandName, "-v"}, "")
 		Ω(output).To(ContainSubstring("gpt-4"))
 		Ω(output).To(ContainSubstring("gpt-3.5-turbo"))
 	})
