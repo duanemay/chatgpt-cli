@@ -105,11 +105,12 @@ chatgpt-cli [command]
 The available commands are as follows:
 
 1. `chat`: Start a chat session with ChatGPT.
-2. `completion`: Generate the autocomplete script for your chosen shell.
-3. `help`: Seek help regarding any command.
-4. `list-models`: Retrieve a list of all models available to your account.
-5. `replay-session`: Replay a chat session from a previously saved file.
-6. `version`: Get version information.
+2. `image`: Generate an image using DALL-E
+3. `completion`: Generate the autocomplete script for your chosen shell.
+4. `help`: Seek help regarding any command.
+5. `list-models`: Retrieve a list of all models available to your account.
+6. `replay-session`: Replay a chat session from a previously saved file.
+7`version`: Get version information.
 
 ### Chatting
 
@@ -146,6 +147,24 @@ Replaying a chat session lets you revisit a previous chat in a more readable for
 ```bash
 chatgpt-cli replay-session --session-file session.json
 ```
+
+### Generating Images
+
+Generate an image with DALL-E using the `image` command:
+
+```bash
+chatgpt-cli image
+```
+
+You'll be prompted to input your description of an image, which can span multiple lines. Send your description with TAB or CTRL+C.
+
+Exiting the chat is made possible by inputting CTRL+C or TAB with no description.
+
+All images are saved with a prefix in the form `dall-e-DATE-TIME-nn.png` where DATE-TIME is the timestamp when the session started, and nn for the image number from the session. You can override the ``--output-prefix`` or `-o` flags.
+
+You can control how many variants of the requested images to generate with the `--number` or `-n` flag. The Number of Images must be between 1 and 10, inclusive.
+ 
+You can control the size of the requested images with the `--size` or `-s` flag. The Size must be one of 256x256, 512x512, or 1024x1024.
 
 ### Listing Models
 

@@ -17,6 +17,9 @@ const (
 	FlagTemperature          = "temperature"
 	FlagTopP                 = "top-p"
 	FlagVerbose              = "verbose"
+	FlagImageSize            = "size"
+	FlagNumberImages         = "number"
+	FlagOutputPrefix         = "output-prefix"
 )
 
 const (
@@ -26,6 +29,8 @@ const (
 	defaultTemperature   = 1.0
 	defaultTopP          = 1.0
 	defaultSystemMessage = ""
+	defaultNumberImages  = 1
+	defaultImageSize     = "1024x1024"
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -77,4 +82,16 @@ func AddMaxTokensFlag(i *int, flags *pflag.FlagSet) {
 
 func AddTopPFlag(f *float32, flags *pflag.FlagSet) {
 	flags.Float32Var(f, FlagTopP, defaultTopP, "TopP, between 0 and 1. tokens with top_p probability mass")
+}
+
+func AddNumberImagesFlag(n *int, flags *pflag.FlagSet) {
+	flags.IntVarP(n, FlagNumberImages, "n", defaultNumberImages, "Number of images to generate, between 1 and 10")
+}
+
+func AddImageSizeFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of 256x256, 512x512, or 1024x1024")
+}
+
+func AddImageOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagOutputPrefix, "o", defaultName, "Prefix used for the output file names")
 }
