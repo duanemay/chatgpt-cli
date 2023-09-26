@@ -16,8 +16,12 @@ Sleep 2s
 Enter
 Tab
 
-Sleep 8s
+Sleep 12s
 Ctrl+C
+
+Type@250ms "ls dall-e*"
+Sleep 2s
+Enter
 
 # Admire the output for a bit.
 Sleep 10s

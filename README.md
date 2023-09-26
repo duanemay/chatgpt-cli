@@ -54,10 +54,11 @@ Which gives us the resulting image.
 ### Generate an Image, non-Interactively
 
 ```bash
-echo "Monkey in a banana costume" | ./chatgpt-cli image -s 256x256 -n 1
+echo "Monkey in a banana costume" | ./chatgpt-cli image -s 256x256 -n 1 -o monkey
 ```
 
-Which gives us the resulting image.
+In non-Interactive mode only the name of the output files are sent to stdout.
+In this case, monkey-01.png, shown here.
 
 ![Result for requesting an image “Monkey in a banana costume”](docs/monkey-01.png)
 
