@@ -11,6 +11,7 @@ dist/
 
 #Session files
 chatgpt-cli-*.json
+dell-e-*.png
 
 #Test Coverage files
 .coverage-report.out

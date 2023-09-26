@@ -1,4 +1,4 @@
-.PHONY: all clean test setup release-patch release-minor release-major
+.PHONY: all clean test docs install setup release-patch release-minor release-major
 module := github.com/duanemay/chatgpt-cli
 all: chatgpt-cli
 
@@ -19,6 +19,12 @@ clean:
 
 test:
 	ginkgo -r -v
+
+docs:
+	docs/generate-demos.sh
+
+install:
+	cp chatgpt-cli $(which chatgpt-cli)
 
 race:
 	ginkgo -r -v -race --trace

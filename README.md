@@ -43,6 +43,20 @@ for file in notes/*.md; do
 done
 ```
 
+### Simple Image Generation
+
+![Image Demo](docs/image-demo.gif)
+
+### Generate an Image, non-Interactively
+
+```bash
+echo "Monkey in a banana costume" | ./chatgpt-cli image -s 256x256 -n 1
+```
+
+Which gives us the resulting image.
+
+![Result for requesting an image “Monkey in a banana costume”](docs/monkey-01.png)
+
 ## Installation
 
 To install ChatGPT CLI using Homebrew:
@@ -50,6 +64,31 @@ To install ChatGPT CLI using Homebrew:
 ```bash
 brew tap duanemay/tap
 brew install chatgpt-cli
+```
+
+### Generating Cover Images for a directory full of notes, non-Interactively
+```bash
+for file in notes/*.md; do
+  dir=$(dirname "${file}")
+  filename=$(basename "${file}")
+  base_filename=${filename%.*}
+
+  printf "\nCreating Images '%s'\n============================\n" "$file"
+  {
+    printf "Describe the contents of an image that would make a good cover image for the blog post below.\n\n"
+    cat "${file}"
+  } | ./chatgpt-cli chat --system-message "As an expert creator of blog posts" > "${dir}/${base_filename}-img-description.txt"
+
+  if [ $? -ne 0 ]; then
+    printf "  Request Failed: '%s'\n" "${file}"
+    rm "${dir}/${base_filename}-img-description.txt"
+    continue
+  fi
+
+  chatgpt_file=$( ls chatgpt-cli* | tail -1 )
+  grep -A 1 user "${chatgpt_file}" | grep '"content":' | cut -d':' -f 2 | sed 's/"//g'
+  cat "${dir}/${base_filename}-img-description.txt" | ./chatgpt-cli image -o "${dir}/${base_filename}-img"
+done
 ```
 
 ## Initial Set Up
