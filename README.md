@@ -47,6 +47,10 @@ done
 
 ![Image Demo](docs/image-demo.gif)
 
+Which gives us the resulting image.
+
+![Result for requesting an image “white maltipoo dressed in a shark costume”](docs/maltipoo-01.png)
+
 ### Generate an Image, non-Interactively
 
 ```bash
