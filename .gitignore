@@ -11,9 +11,12 @@ dist/
 
 #Session files
 chatgpt-cli-*.json
-dell-e-*.png
+dall-e-*.png
 
 #Test Coverage files
 .coverage-report.out
 coverage.html
 
+#Examples
+bin/
+notes/
