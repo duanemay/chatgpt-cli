@@ -104,7 +104,8 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 	mySpinner := pterm.DefaultSpinner
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
-	spinnerSuccess, _ := mySpinner.Start("Sending to DALL·E, please wait...")
+	mySpinner.Writer = os.Stderr
+	successSpinner, err := mySpinner.Start("Sending to DALL-E, please wait...")
 
 	imageRequest := openai.ImageRequest{
 		Prompt:         chatRequestString,
@@ -113,7 +114,8 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 		ResponseFormat: openai.CreateImageResponseFormatB64JSON,
 	}
 	resp, err := client.CreateImage(context.Background(), imageRequest)
-	spinnerSuccess.Success()
+	successSpinner.Success()
+
 	if err != nil {
 		return err
 	}

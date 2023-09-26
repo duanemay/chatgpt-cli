@@ -110,14 +110,16 @@ func sendMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequest 
 	mySpinner := pterm.DefaultSpinner
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
-	spinnerSuccess, _ := mySpinner.Start("Sending to ChatGPT, please wait...")
+	mySpinner.SetWriter(os.Stderr)
+	successSpinner, err := mySpinner.Start("Sending to ChatGPT, please wait...")
 
 	chatCompletionRequest.Messages = append(chatCompletionRequest.Messages, openai.ChatCompletionMessage{
 		Role:    f.role,
 		Content: chatRequestString,
 	})
 	resp, err := client.CreateChatCompletion(context.Background(), *chatCompletionRequest)
-	spinnerSuccess.Success()
+	successSpinner.Success()
+
 	if err != nil {
 		return err
 	}
