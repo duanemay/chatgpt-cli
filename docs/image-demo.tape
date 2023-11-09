@@ -5,7 +5,7 @@ Set Height 600
 
 Sleep 2s
 
-Type@100ms "chatgpt-cli image -o maltipoo  -s 1024x1024 --style natural --quality hd"
+Type@100ms "chatgpt-cli image -o maltipoo"
 Sleep 2s
 Enter
 # Admire the output for a bit.

@@ -8,7 +8,11 @@ import (
 	"fmt"
 	os2 "github.com/duanemay/chatgpt-cli/pkg/os"
 	"github.com/sashabaranov/go-openai"
+	"golang.org/x/image/webp"
+	"image"
+	"image/jpeg"
 	"image/png"
+	"net/http"
 	"time"
 
 	"github.com/pterm/pterm"
@@ -138,10 +142,27 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 		}
 
 		r := bytes.NewReader(imgBytes)
-		imgData, err := png.Decode(r)
-		if err != nil {
-			fmt.Printf("PNG decode error: %v\n", err)
-			continue
+		contentType := http.DetectContentType(imgBytes)
+		var imgData image.Image
+		switch contentType {
+		case "image/png":
+			imgData, err = png.Decode(r)
+			if err != nil {
+				fmt.Printf("PNG decode error: %v\n", err)
+				continue
+			}
+		case "image/jpeg":
+			imgData, err = jpeg.Decode(r)
+			if err != nil {
+				fmt.Printf("JPEG decode error: %v\n", err)
+				continue
+			}
+		case "image/webp":
+			imgData, err = webp.Decode(r)
+			if err != nil {
+				fmt.Printf("WebP decode error: %v\n", err)
+				continue
+			}
 		}
 
 		fileName := getFileName(f)

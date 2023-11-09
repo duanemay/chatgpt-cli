@@ -54,7 +54,7 @@ Which gives us the resulting image.
 ### Generate an Image, non-Interactively
 
 ```bash
-echo "Monkey in a banana costume" | ./chatgpt-cli image -s 256x256 -n 1 -o monkey
+echo "Monkey in a banana costume" | ./chatgpt-cli image -o monkey
 ```
 
 In non-Interactive mode only the name of the output files are sent to stdout.
@@ -120,11 +120,18 @@ Each flag can be set in a configuration file, by changing it to uppercase and re
 
 The full list of available flags and corresponding environment variables:
 
+*Common Flags:*
+
 | Flag                 | Short | Config File Key | Default                                | Description                                |
 |----------------------|-------|---------------|----------------------------------------|--------------------------------------------|
 | `--api-key`          | `-k`  | `API_KEY`     | **Required**                           | ChatGPT API Key                            |
 | `--config`           | `-c`  | `CONFIG`      | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load                        |
 | `--verbose`          | `-v`  | `VERBOSE`     | `false`                                | Verbose logging                            |
+
+*Chat Flags:*
+
+| Flag                 | Short | Config File Key | Default                                | Description                                |
+|----------------------|-------|---------------|----------------------------------------|--------------------------------------------|
 | `--system-message`   |       |               | ``                                    | Initial System message sent to ChatGPT     |
 | `--session-file`     | `-s`  | `SESSION_FILE` | Generated                              | Session file                               |
 | `--no-write-session` |       | `NO_WRITE_SESSION` | false                                  | Do not write or update session file        |
@@ -133,6 +140,17 @@ The full list of available flags and corresponding environment variables:
 | `--temperature`      | `-m`  | `TEMPERATURE` | `1.0`                                  | Temperature: 0-2                           |
 | `--max-tokens`       |       | `MAX_TOKENS`  | `0`                                    | Max tokens: 8192                           |
 | `--top-p`            |       | `TOP_P`       | `1.0`                                  | Top P: 0-1                                 |
+
+*Image Flags:*
+
+| Flag        | Short | Config File Key | Default    | Description                  |
+|-------------|-------|-----------------|------------|------------------------------|
+| `--model`   | `-m`  | `MODEL`         | `dall-e-3` | Model to use                 |
+| `--number`  | `-n`  |                 | `1`        | Number of images to generate |
+| `--quality` |       | `QUALITY`       | `standard` | Image Quality                |
+| `--size`    | `-s`  | `SIZE`          | 1024x1024  | Image Size                   |
+| `--style`   |       | `STYLE`         | `vivid`    | Image Style                  |
+| `--output-prefix` | `-o`   | `OutputPrefix`       | Generated  | File Name Prefix             |
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 
