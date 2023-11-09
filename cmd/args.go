@@ -19,6 +19,9 @@ const (
 	FlagVerbose              = "verbose"
 	FlagImageSize            = "size"
 	FlagNumberImages         = "number"
+	FlagImageModel           = "model"
+	FlagImageQuality         = "quality"
+	FlagImageStyle           = "style"
 	FlagOutputPrefix         = "output-prefix"
 )
 
@@ -30,7 +33,10 @@ const (
 	defaultTopP          = 1.0
 	defaultSystemMessage = ""
 	defaultNumberImages  = 1
-	defaultImageSize     = "1024x1024"
+	defaultImageModel    = openai.CreateImageModelDallE3
+	defaultImageQuality  = openai.CreateImageQualityStandard
+	defaultImageStyle    = openai.CreateImageStyleVivid
+	defaultImageSize     = openai.CreateImageSize1024x1024
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -85,11 +91,23 @@ func AddTopPFlag(f *float32, flags *pflag.FlagSet) {
 }
 
 func AddNumberImagesFlag(n *int, flags *pflag.FlagSet) {
-	flags.IntVarP(n, FlagNumberImages, "n", defaultNumberImages, "Number of images to generate, between 1 and 10")
+	flags.IntVarP(n, FlagNumberImages, "n", defaultNumberImages, "Number of images to generate, between 1 and 10, for DALL-E 2")
+}
+
+func AddImageModelFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagImageModel, "m", defaultImageModel, "Model to use for image generation. Must be one of 'dall-e-3' or 'dall-e-2")
+}
+
+func AddImageStyleFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVar(str, FlagImageStyle, defaultImageStyle, "Style to use for image generation. Must be one of 'vivid' or 'natural' (for DALL-E 3 only)")
+}
+
+func AddImageQualityFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVar(str, FlagImageQuality, defaultImageQuality, "Quality to use for image generation. Must be one of 'standard' or 'hd' (for DALL-E 3 only)")
 }
 
 func AddImageSizeFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of 256x256, 512x512, or 1024x1024")
+	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of 256x256, 512x512, or 1024x1024 for DALL-E 2, or 1024x1024, 1792x1024, or 1024x1792 for DALL-E 3")
 }
 
 func AddImageOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {

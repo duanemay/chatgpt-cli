@@ -30,8 +30,11 @@ func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
 	}
 	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
 
+	AddImageModelFlag(&imageFlags.Model, cmd.PersistentFlags())
 	AddNumberImagesFlag(&imageFlags.NumberImages, cmd.PersistentFlags())
+	AddImageQualityFlag(&imageFlags.Quality, cmd.PersistentFlags())
 	AddImageSizeFlag(&imageFlags.Size, cmd.PersistentFlags())
+	AddImageStyleFlag(&imageFlags.Style, cmd.PersistentFlags())
 	AddImageOutputPrefixFlag(&imageFlags.OutputPrefix, "dall-e-"+time.Now().UTC().Format(time.RFC3339), cmd.PersistentFlags())
 	_ = cmd.MarkPersistentFlagRequired("apikey")
 
@@ -40,7 +43,7 @@ func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
 
 func imageCmdRunner(rootFlags *RootFlags, imageFlags *ImageFlags, chatContext *ChatContext) func(cmd *cobra.Command, args []string) error {
 	return func(_ *cobra.Command, _ []string) error {
-		log.Debugf("chatCmd called")
+		log.Debugf("imageCmd called")
 		err := imageFlags.ValidateFlags()
 		if err != nil {
 			log.WithError(err).Fatal()
@@ -94,7 +97,11 @@ func imageCmdRunner(rootFlags *RootFlags, imageFlags *ImageFlags, chatContext *C
 
 func printImageBanner(f *ImageFlags) {
 	TitleFmt.Printf("ChatGPT CLI v%s\n", version)
-	fmt.Printf("numberImages: %d, size: %s\n", f.NumberImages, f.Size)
+	if f.Model == openai.CreateImageModelDallE2 {
+		fmt.Printf("model: %s, numberImages: %d, size: %s\n", f.Model, f.NumberImages, f.Size)
+	} else {
+		fmt.Printf("model: %s, size: %s, style: %s, quality: %s\n", f.Model, f.Size, f.Style, f.Quality)
+	}
 	fmt.Printf("- Press TAB after entering a message to send.\n")
 	fmt.Printf("- Press TAB or CTRL+C with a blank message to terminate the session without sending.\n")
 }
@@ -109,9 +116,12 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 
 	imageRequest := openai.ImageRequest{
 		Prompt:         chatRequestString,
+		Model:          f.Model,
 		N:              f.NumberImages,
-		Size:           f.Size,
+		Quality:        f.Quality,
 		ResponseFormat: openai.CreateImageResponseFormatB64JSON,
+		Size:           f.Size,
+		Style:          f.Style,
 	}
 	resp, err := client.CreateImage(context.Background(), imageRequest)
 	successSpinner.Success()

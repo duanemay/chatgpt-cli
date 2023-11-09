@@ -8,7 +8,7 @@ else
     uname_S := $(shell uname -s)
 endif
 
-chatgpt-cli: **/*.go
+chatgpt-cli: **/*.go go.mod go.sum
 	goreleaser build --snapshot --clean --single-target --output .
 
 **/*.go:
@@ -18,7 +18,7 @@ clean:
 	rm -rf dist/ coverage.html .coverage-report.out chatgpt-cli
 
 test:
-	ginkgo -r -v
+	go run github.com/onsi/ginkgo/v2/ginkgo -r
 
 docs:
 	docs/generate-demos.sh
@@ -27,10 +27,10 @@ install:
 	cp chatgpt-cli $(which chatgpt-cli)
 
 race:
-	ginkgo -r -v -race --trace
+	go run github.com/onsi/ginkgo/v2/ginkgo -r -race --trace
 
 cov:
-	ginkgo -r \
+	go run github.com/onsi/ginkgo/v2/ginkgo -r \
 		--coverpkg=${module},${module}/cmd \
  		--coverprofile=.coverage-report.out
 	go tool cover -html=./.coverage-report.out -o coverage.html
