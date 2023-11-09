@@ -11,7 +11,7 @@ Enter
 # Admire the output for a bit.
 Sleep 8s
 
-Type@250ms "white maltipoo dressed in a shark costume"
+Type@250ms "white maltipoo dressed in a shark costume, on a dock by a lake"
 Sleep 2s
 Enter
 Tab
@@ -19,7 +19,7 @@ Tab
 Sleep 12s
 Ctrl+C
 
-Type@250ms "ls dall-e*"
+Type@250ms "ls maltipoo*"
 Sleep 2s
 Enter
 

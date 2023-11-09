@@ -54,7 +54,7 @@ Which gives us the resulting image.
 ### Generate an Image, non-Interactively
 
 ```bash
-echo "Monkey in a banana costume" | ./chatgpt-cli image -o monkey
+echo "Monkey in a banana costume" | chatgpt-cli image -o monkey
 ```
 
 In non-Interactive mode only the name of the output files are sent to stdout.
@@ -82,7 +82,7 @@ for file in notes/*.md; do
   {
     printf "Describe the contents of an image that would make a good cover image for the blog post below.\n\n"
     cat "${file}"
-  } | ./chatgpt-cli chat --system-message "As an expert creator of blog posts" > "${dir}/${base_filename}-img-description.txt"
+  } | chatgpt-cli chat --system-message "As an expert creator of blog posts" > "${dir}/${base_filename}-img-description.txt"
 
   if [ $? -ne 0 ]; then
     printf "  Request Failed: '%s'\n" "${file}"
@@ -92,7 +92,7 @@ for file in notes/*.md; do
 
   chatgpt_file=$( ls chatgpt-cli* | tail -1 )
   grep -A 1 user "${chatgpt_file}" | grep '"content":' | cut -d':' -f 2 | sed 's/"//g'
-  cat "${dir}/${base_filename}-img-description.txt" | ./chatgpt-cli image -o "${dir}/${base_filename}-img"
+  cat "${dir}/${base_filename}-img-description.txt" | chatgpt-cli image -o "${dir}/${base_filename}-img"
 done
 ```
 
