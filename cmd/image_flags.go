@@ -54,7 +54,7 @@ func (f *ImageFlags) ValidateDalle3Flags() error {
 	case openai.CreateImageSize1024x1024, openai.CreateImageSize1024x1792, openai.CreateImageSize1792x1024:
 		// these are fine
 	default:
-		return fmt.Errorf("Size be one of 1024x1024, 1792x1024, or 1024x1792, for DALL-E 3")
+		return fmt.Errorf("Size must be one of 1024x1024, 1792x1024, or 1024x1792, for DALL-E 3")
 	}
 	switch f.Quality {
 	case openai.CreateImageQualityStandard, openai.CreateImageQualityHD:
