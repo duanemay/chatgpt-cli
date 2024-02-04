@@ -116,9 +116,12 @@ The priority order for the configuration settings is as follows:
 Command line flags > Environment Variables > Configuration files > Defaults
 ```
 
-Each flag can be set in a configuration file, by changing it to uppercase and replacing `-` with `_`.
+Each flag can be set in a configuration file, by changing it to uppercase and replacing `-` with `_`. 
+Environment variables are the same as the configuration file flag, with the addition of the prefix `CHATGPT_`.
 
-The full list of available flags and corresponding environment variables:
+As an example, the `--api-key sk` command line flag can be set in a configuration file as `API_KEY=sk`, and as an environment variable as `CHATGPT_API_KEY=sk`.
+
+The full list of available flags and corresponding config file variables:
 
 *Common Flags:*
 
@@ -130,16 +133,16 @@ The full list of available flags and corresponding environment variables:
 
 *Chat Flags:*
 
-| Flag                 | Short | Config File Key | Default                                | Description                                |
-|----------------------|-------|---------------|----------------------------------------|--------------------------------------------|
-| `--system-message`   |       |               | ``                                    | Initial System message sent to ChatGPT     |
-| `--session-file`     | `-s`  | `SESSION_FILE` | Generated                              | Session file                               |
-| `--no-write-session` |       | `NO_WRITE_SESSION` | false                                  | Do not write or update session file        |
-| `--model`            | `-m`  | `MODEL`       | `gpt-4`                                | Model to use                               |
-| `--role`             |       | `ROLE`        | `user`                                 | Role of User                               |
-| `--temperature`      | `-m`  | `TEMPERATURE` | `1.0`                                  | Temperature: 0-2                           |
-| `--max-tokens`       |       | `MAX_TOKENS`  | `0`                                    | Max tokens: 8192                           |
-| `--top-p`            |       | `TOP_P`       | `1.0`                                  | Top P: 0-1                                 |
+| Flag                 | Short | Config File Key      | Default                                | Description                                |
+|----------------------|-------|----------------------|----------------------------------------|--------------------------------------------|
+| `--system-message`   |       |                      | ``                                    | Initial System message sent to ChatGPT     |
+| `--session-file`     | `-s`  | `SESSION_FILE`       | Generated                              | Session file                               |
+| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false                                  | Do not write or update session file        |
+| `--model`            | `-m`  | `MODEL`              | `gpt-4`                                | Model to use                               |
+| `--role`             |       | `ROLE`               | `user`                                 | Role of User                               |
+| `--temperature`      | `-m`  | `TEMPERATURE`        | `1.0`                                  | Temperature: 0-2                           |
+| `--max-tokens`       |       | `MAX_TOKENS`         | `0`                                    | Max tokens: 8192                           |
+| `--top-p`            |       | `TOP_P`              | `1.0`                                  | Top P: 0-1                                 |
 
 *Image Flags:*
 
