@@ -49,7 +49,7 @@ brews:
   - repository:
       owner: duanemay
       name: homebrew-tap
-    folder: Formula
+    directory: Formula
     homepage: https://github.com/duanemay/homebrew-tap
     description: Recursively expand archives containing other archives
 

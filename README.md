@@ -98,7 +98,7 @@ done
 
 ## Initial Set Up
 
-To use the ChatGPT CLI, you'll need a ChatGPT API key. You can generate this key by signing up on the [OpenAI platform](https://platform.openai.com/account/api-keys).
+To use the ChatGPT CLI, you'll need a ChatGPT API key. You can generate this key by signing up on the [OpenAI platform](https://platform.openai.com/account/api-keys). ChatGPT CLI now supports Project API keys which have replaced user API keys. In addition, you will need to add funds to your account.
 
 It is recommended to create a `.chatgpt-cli` file in your home directory or the directory where you'll run the CLI. Inside this file, include your API key alongside additional default settings you wish to use.
 
@@ -133,16 +133,16 @@ The full list of available flags and corresponding config file variables:
 
 *Chat Flags:*
 
-| Flag                 | Short | Config File Key      | Default                                | Description                                |
-|----------------------|-------|----------------------|----------------------------------------|--------------------------------------------|
-| `--system-message`   |       |                      | ``                                    | Initial System message sent to ChatGPT     |
-| `--session-file`     | `-s`  | `SESSION_FILE`       | Generated                              | Session file                               |
-| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false                                  | Do not write or update session file        |
-| `--model`            | `-m`  | `MODEL`              | `gpt-4`                                | Model to use                               |
-| `--role`             |       | `ROLE`               | `user`                                 | Role of User                               |
-| `--temperature`      | `-m`  | `TEMPERATURE`        | `1.0`                                  | Temperature: 0-2                           |
-| `--max-tokens`       |       | `MAX_TOKENS`         | `0`                                    | Max tokens: 8192                           |
-| `--top-p`            |       | `TOP_P`              | `1.0`                                  | Top P: 0-1                                 |
+| Flag                 | Short | Config File Key      | Default   | Description                            |
+|----------------------|-------|----------------------|-----------|----------------------------------------|
+| `--system-message`   |       |                      | ``        | Initial System message sent to ChatGPT |
+| `--session-file`     | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
+| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
+| `--model`            | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
+| `--role`             |       | `ROLE`               | `user`    | Role of User                           |
+| `--temperature`      | `-m`  | `TEMPERATURE`        | `1.0`     | Temperature: 0-2                       |
+| `--max-tokens`       |       | `MAX_TOKENS`         | `0`       | Max tokens: 8192                       |
+| `--top-p`            |       | `TOP_P`              | `1.0`     | Top P: 0-1                             |
 
 *Image Flags:*
 
@@ -197,7 +197,7 @@ All chat sessions are saved in a session file, for which the `--session-file` fl
 chatgpt-cli chat --session-file session.json
 ```
 
-The `--model`, `--role`, `--temperature`, `--max-tokens`, and `--top-p` flags allow for individual configuration of the Model, Role, Temperature, Max Tokens, and Top P respectively.
+The `--model`, `--role`, `--temperature`, `--max-tokens`, and `--top-p` flags allow for individual configuration of the Model, Role, Temperature, Max Tokens, and Top P respectively. The default `--model` used will be updated overtime as new models are released.
 
 A system prompt can be set by using the `--system-message` flag:
 
@@ -252,7 +252,7 @@ chatgpt-cli version
 For a dry-run of the deployment process, you can run the following:
 
 ```bash
-goreleaser --snapshot --skip-publish --clean
+goreleaser --snapshot --skip=publish --clean
 ```
 
 For a full deployment, you'll need to add a GitHub token to the `./.github_token` file, then run the following:
