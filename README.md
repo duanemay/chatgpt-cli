@@ -258,6 +258,10 @@ goreleaser --snapshot --skip=publish --clean
 For a full deployment, you'll need to add a GitHub token to the `./.github_token` file, then run the following:
 
 ```bash
+git tag <vNewVersion>
 goreleaser --clean
 brew upgrade
+
+docs/generate-demos.sh
 ```
+
