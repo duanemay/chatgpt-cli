@@ -82,7 +82,7 @@ func chatCmdRun(rootFlags *RootFlags, chatFlags *ChatFlags, chatContext *ChatCon
 				return nil
 			}
 
-			if err := sendMessages(chatFlags, chatContext, chatCompletionRequest, client, chatRequestString); err != nil {
+			if err := sendChatMessages(chatFlags, chatContext, chatCompletionRequest, client, chatRequestString); err != nil {
 				log.WithError(err).Fatal()
 			}
 
@@ -106,7 +106,7 @@ func printBanner(f *ChatFlags) {
 }
 
 // sendMessages sends messages to ChatGPT and prints the response
-func sendMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequest *openai.ChatCompletionRequest, client *openai.Client, chatRequestString string) error {
+func sendChatMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequest *openai.ChatCompletionRequest, client *openai.Client, chatRequestString string) error {
 	mySpinner := pterm.DefaultSpinner
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true

@@ -23,6 +23,10 @@ const (
 	FlagImageQuality         = "quality"
 	FlagImageStyle           = "style"
 	FlagOutputPrefix         = "output-prefix"
+	FlagDetail               = "detail"
+	FlagVoice                = "voice"
+	FlagSpeed                = "speed"
+	FlagInputFile            = "file"
 )
 
 const (
@@ -37,6 +41,10 @@ const (
 	defaultImageQuality  = openai.CreateImageQualityStandard
 	defaultImageStyle    = openai.CreateImageStyleVivid
 	defaultImageSize     = openai.CreateImageSize1024x1024
+	defaultDetail        = string(openai.ImageURLDetailAuto)
+	defaultSpeed         = 1.0
+	defaultVoice         = string(openai.VoiceAlloy)
+	defaultSpeechModel   = string(openai.TTSModel1)
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -56,6 +64,26 @@ func AddApiKeyFlag(str *string, flags *pflag.FlagSet) {
 
 func AddModelFlag(str *string, flags *pflag.FlagSet) {
 	flags.StringVarP(str, FlagModel, "m", defaultModel, "ChatGPT Model")
+}
+
+func AddSpeechModelFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagModel, "m", defaultSpeechModel, "ChatGPT Text to Speech Model")
+}
+
+func AddDetailFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagDetail, "d", defaultDetail, "control how the model processes the image and generates its textual understanding. Must be one of low, high, or auto")
+}
+
+func AddVoiceFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVar(str, FlagVoice, defaultVoice, "control the voice used. Must be one of alloy, echo, fable, onyx, nova, or shimmer")
+}
+
+func AddSpeedFlag(f *float64, flags *pflag.FlagSet) {
+	flags.Float64VarP(f, FlagSpeed, "s", defaultSpeed, "control speed of audio. Must be between 0.25 and 4.0")
+}
+
+func AddInputFileFlag(str *[]string, flags *pflag.FlagSet) {
+	flags.StringArrayVarP(str, FlagInputFile, "f", nil, "Input image files, maybe specified more than once")
 }
 
 func AddRoleFlag(str *string, flags *pflag.FlagSet) {

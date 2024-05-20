@@ -19,7 +19,7 @@ var _ = Describe("Image Flags", func() {
 		imageFlags.Model = openai.CreateImageModelDallE2
 		err := imageFlags.ValidateFlags()
 		Ω(err).Error().To(HaveOccurred())
-		Ω(err.Error()).Should(ContainSubstring("Size must be one of"))
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
 
 		imageFlags.Size = openai.CreateImageSize256x256
 		err = imageFlags.ValidateFlags()
@@ -40,21 +40,21 @@ var _ = Describe("Image Flags", func() {
 		imageFlags.Model = openai.CreateImageModelDallE3
 		err := imageFlags.ValidateFlags()
 		Ω(err).Error().To(HaveOccurred())
-		Ω(err.Error()).Should(ContainSubstring("Size must be one of"))
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
 
 		imageFlags.Size = openai.CreateImageSize256x256
 		Ω(err).Error().To(HaveOccurred())
-		Ω(err.Error()).Should(ContainSubstring("Size must be one of"))
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
 
 		imageFlags.Size = openai.CreateImageSize1792x1024
 		err = imageFlags.ValidateFlags()
 		Ω(err).Error().To(HaveOccurred())
-		Ω(err.Error()).Should(ContainSubstring("Quality must be one of"))
+		Ω(err.Error()).Should(ContainSubstring("quality must be one of"))
 
 		imageFlags.Quality = openai.CreateImageQualityStandard
 		err = imageFlags.ValidateFlags()
 		Ω(err).Error().To(HaveOccurred())
-		Ω(err.Error()).Should(ContainSubstring("Style must be one of"))
+		Ω(err.Error()).Should(ContainSubstring("style must be one of"))
 
 		imageFlags.Style = openai.CreateImageStyleVivid
 		err = imageFlags.ValidateFlags()

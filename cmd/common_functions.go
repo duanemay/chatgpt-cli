@@ -35,7 +35,7 @@ func detectTerminal() bool {
 func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *openai.ChatCompletionRequest {
 	var chat *openai.ChatCompletionRequest = nil
 
-	// if a sessionFile is provided check if it exists
+	// if a sessionFile is provided, check if it exists
 	if f.sessionFile != "" {
 		if _, err := os.Stat(f.sessionFile); err == nil {
 			// sessionFile provided and exists, load it

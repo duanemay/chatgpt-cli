@@ -165,7 +165,7 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 			}
 		}
 
-		fileName := getFileName(f)
+		fileName := getImageFileName(f)
 		file, err := os.Create(fileName)
 		if err != nil {
 			fmt.Printf("File creation error: %v\n", err)
@@ -185,7 +185,7 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 	return nil
 }
 
-func getFileName(f *ImageFlags) string {
+func getImageFileName(f *ImageFlags) string {
 	thisImageCount := f.CurrentImageCount
 	f.CurrentImageCount = thisImageCount + 1
 	filename := fmt.Sprintf("%s-%02d.png", f.OutputPrefix, thisImageCount)

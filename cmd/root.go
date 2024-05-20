@@ -27,6 +27,8 @@ func NewRootCmd() *cobra.Command {
 
 	cmds.AddCommand(NewImageCmd(rootFlags))
 	cmds.AddCommand(NewChatCmd(rootFlags))
+	cmds.AddCommand(NewVisionCmd(rootFlags))
+	cmds.AddCommand(NewSpeechCmd(rootFlags))
 	cmds.AddCommand(NewListModelsCmd(rootFlags))
 	cmds.AddCommand(NewReplaySessionCmd())
 	cmds.AddCommand(NewVersionCmd())
