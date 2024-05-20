@@ -68,7 +68,9 @@ In this case, monkey-01.png, shown here.
 
 Which gives us the resulting audio file.
 
-![Results for requesting text to speech](docs/robot-01.mp4?raw=true)
+
+https://github.com/duanemay/chatgpt-cli/assets/991170/bb629736-3dc1-4ee1-99f8-1a93646c60da
+
 
 ## Installation
 
