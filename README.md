@@ -43,7 +43,7 @@ for file in notes/*.md; do
 done
 ```
 
-### Simple Image Generation
+### Image Generation and Vision Chat
 
 ![Image Demo](docs/image-demo.gif)
 
@@ -54,13 +54,21 @@ Which gives us the resulting image.
 ### Generate an Image, non-Interactively
 
 ```bash
-echo "Monkey in a banana costume" | chatgpt-cli image -o monkey
+echo "Monkey in a banana costume, on a high wire above a circus" | chatgpt-cli image -o monkey
 ```
 
 In non-Interactive mode only the name of the output files are sent to stdout.
 In this case, monkey-01.png, shown here.
 
-![Result for requesting an image “Monkey in a banana costume”](docs/monkey-01.png)
+![Result for requesting an image “Monkey in a banana costume, on a high wire above a circus”](docs/monkey-01.png)
+
+### Generate an Audio file from Text (Text to Speech)
+
+![Speech Demo](docs/speech-demo.gif)
+
+Which gives us the resulting audio file.
+
+![Results for requesting text to speech](docs/robot-01.mp4?raw=true)
 
 ## Installation
 
@@ -170,11 +178,13 @@ chatgpt-cli [command]
 The available commands are as follows:
 
 1. `chat`: Start a chat session with ChatGPT.
-2. `image`: Generate an image using DALL-E
-3. `completion`: Generate the autocomplete script for your chosen shell.
-4. `help`: Seek help regarding any command.
-5. `list-models`: Retrieve a list of all models available to your account.
-6. `replay-session`: Replay a chat session from a previously saved file.
+2. `vision`: Upload an image to ChatGPT for use in chat.
+3. `image`: Generate an image using DALL-E
+4. `speech`: Generate speech using ChatGPT
+5. `completion`: Generate the autocomplete script for your chosen shell.
+6. `help`: Seek help regarding any command.
+7. `list-models`: Retrieve a list of all models available to your account.
+8. `replay-session`: Replay a chat session from a previously saved file.
 7`version`: Get version information.
 
 ### Chatting
@@ -213,6 +223,19 @@ Replaying a chat session lets you revisit a previous chat in a more readable for
 chatgpt-cli replay-session --session-file session.json
 ```
 
+### Refer to an image in a Chat
+
+Initiate a chat with images uploaded to ChatGPT using the `vision` command:
+
+```bash
+chatgpt-cli vision --file image.jpg --file image2.jpg
+```
+
+This will upload the image to ChatGPT for use in the chat.
+It also supports the session file, you can start a chat with `chat`, use `vision` to upload a file and then continue to ask more questions with `chat` by linking with a `--session-file` between commands.
+
+You'll be prompted to input your message, which can span multiple lines. Send your message with TAB or CTRL+C.
+
 ### Generating Images
 
 Generate an image with DALL-E using the `image` command:
@@ -230,6 +253,24 @@ All images are saved with a prefix in the form `dall-e-DATE-TIME-nn.png` where D
 You can control how many variants of the requested images to generate with the `--number` or `-n` flag. The Number of Images must be between 1 and 10, inclusive.
  
 You can control the size of the requested images with the `--size` or `-s` flag. The Size must be one of 256x256, 512x512, or 1024x1024.
+
+### Generating Text to Speech
+
+Generate an audio file, reading some text using the `speech` command:
+
+```bash
+chatgpt-cli speech
+```
+
+You'll be prompted to input the text you would like read, which can span multiple lines. Send your description with TAB or CTRL+C.
+
+Exiting the chat is made possible by inputting CTRL+C or TAB with no description.
+
+Audio files are saved with a prefix in the form `tts-DATE-TIME-nn.mp3` where DATE-TIME is the timestamp when the session started, and nn for the image number from the session. You can override the ``--output-prefix`` or `-o` flags.
+
+You can control the speed of the audio with the `--speed` or `-s` flag. The speed must be between 0.25 and 4.0, inclusive.
+You can control the voice of the audio with the `--voice` or `-v` flag. The voice must be one of alloy, echo, fable, onyx, nova, or shimmer.
+You can control the TTS model with the `--model` or `-m` flag. The model must be one of tts-1, tts-1-hd, or canary-tts.
 
 ### Listing Models
 

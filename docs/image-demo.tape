@@ -16,12 +16,23 @@ Sleep 2s
 Enter
 Tab
 
-Sleep 12s
+Sleep 8s
 Ctrl+C
 
 Type@250ms "ls maltipoo*"
 Sleep 2s
 Enter
 
+# now let's see what got generated
+Type@100ms "chatgpt-cli vision --file maltipoo-01.png"
+Sleep 2s
+Enter
+Sleep 5s
+
+Type@300ms "Describe what is in this image."
+Sleep 2s
+Enter
+Tab
+
 # Admire the output for a bit.
-Sleep 10s
+Sleep 20s
