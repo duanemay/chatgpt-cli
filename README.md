@@ -62,6 +62,18 @@ In this case, monkey-01.png, shown here.
 
 ![Result for requesting an image “Monkey in a banana costume, on a high wire above a circus”](docs/monkey-01.png)
 
+
+```bash
+echo "What is in this image?" | chatgpt-cli vision --file monkey-01.png
+```
+
+This will upload the image to ChatGPT for use in the chat, and use it to answer the question.
+You might get a response like this:
+
+```
+The image depicts a whimsical circus scene with a monkey in a banana suit balancing on a tightrope. The atmosphere is lively, with a large audience in tents watching the performance. The setting has bright lights and colorful decorations, capturing the festive spirit of a circus.                                                                                                                                              
+```
+
 ### Generate an Audio file from Text (Text to Speech)
 
 ![Speech Demo](docs/speech-demo.gif)
@@ -71,6 +83,11 @@ Which gives us the resulting audio file.
 
 https://github.com/duanemay/chatgpt-cli/assets/991170/bb629736-3dc1-4ee1-99f8-1a93646c60da
 
+And similarly, you can do this non-Interactively
+
+```bash
+echo "Hello, I am a robot. I am here to help you with your tasks." | chatgpt-cli speech
+```
 
 ## Installation
 
@@ -135,35 +152,56 @@ The full list of available flags and corresponding config file variables:
 
 *Common Flags:*
 
-| Flag                 | Short | Config File Key | Default                                | Description                                |
-|----------------------|-------|---------------|----------------------------------------|--------------------------------------------|
-| `--api-key`          | `-k`  | `API_KEY`     | **Required**                           | ChatGPT API Key                            |
-| `--config`           | `-c`  | `CONFIG`      | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load                        |
-| `--verbose`          | `-v`  | `VERBOSE`     | `false`                                | Verbose logging                            |
+| Flag         | Short | Config File Key  | Default                                | Description          |
+|--------------|-------|------------------|----------------------------------------|----------------------|
+| `--api-key`  | `-k`  | `API_KEY`        | **Required**                           | ChatGPT API Key      |
+| `--config`   | `-c`  | `CONFIG`         | ./.chatgpt-cli then $HOME/.chatgpt-cli | Config file to load  |
+| `--verbose`  | `-v`  | `VERBOSE`        | `false`                                | Verbose logging      |
 
 *Chat Flags:*
 
-| Flag                 | Short | Config File Key      | Default   | Description                            |
-|----------------------|-------|----------------------|-----------|----------------------------------------|
-| `--system-message`   |       |                      | ``        | Initial System message sent to ChatGPT |
-| `--session-file`     | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
-| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
-| `--model`            | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
-| `--role`             |       | `ROLE`               | `user`    | Role of User                           |
-| `--temperature`      | `-m`  | `TEMPERATURE`        | `1.0`     | Temperature: 0-2                       |
-| `--max-tokens`       |       | `MAX_TOKENS`         | `0`       | Max tokens: 8192                       |
-| `--top-p`            |       | `TOP_P`              | `1.0`     | Top P: 0-1                             |
+| Flag                    | Short | Config File Key      | Default   | Description                            |
+|-------------------------|-------|----------------------|-----------|----------------------------------------|
+| `--system-message`      |       |                      | ``        | Initial System message sent to ChatGPT |
+| `--session-file`        | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
+| `--skip-write-session`  |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
+| `--model`               | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
+| `--role`                |       | `ROLE`               | `user`    | Role of User                           |
+| `--temperature`         | `-m`  | `TEMPERATURE`        | `1.0`     | Temperature: 0-2                       |
+| `--max-tokens`          |       | `MAX_TOKENS`         | `0`       | Max tokens: 8192                       |
+| `--top-p`               |       | `TOP_P`              | `1.0`     | Top P: 0-1                             |
 
 *Image Flags:*
 
-| Flag        | Short | Config File Key | Default    | Description                  |
-|-------------|-------|-----------------|------------|------------------------------|
-| `--model`   | `-m`  | `MODEL`         | `dall-e-3` | Model to use                 |
-| `--number`  | `-n`  |                 | `1`        | Number of images to generate |
-| `--quality` |       | `QUALITY`       | `standard` | Image Quality                |
-| `--size`    | `-s`  | `SIZE`          | 1024x1024  | Image Size                   |
-| `--style`   |       | `STYLE`         | `vivid`    | Image Style                  |
-| `--output-prefix` | `-o`   | `OutputPrefix`       | Generated  | File Name Prefix             |
+| Flag               | Short | Config File Key | Default    | Description                   |
+|--------------------|-------|-----------------|------------|-------------------------------|
+| `--model`          | `-m`  | `MODEL`         | `dall-e-3` | Model to use                  |
+| `--number`         | `-n`  |                 | `1`        | Number of images to generate  |
+| `--quality`        |       | `QUALITY`       | `standard` | Image Quality                 |
+| `--size`           | `-s`  | `SIZE`          | 1024x1024  | Image Size                    |
+| `--style`          |       | `STYLE`         | `vivid`    | Image Style                   |
+| `--output-prefix`  | `-o`  | `OUTPUT_PREFIX` | Generated  | File Name Prefix              |
+
+*Speech Flags:*
+
+| Flag              | Short | Config File Key | Default   | Description                 |
+|-------------------|-------|-----------------|-----------|-----------------------------|
+| `--model`         | `-m`  | `MODEL`         | `tts-1`   | Text to Speech Model to use |
+| `--speed`         | `-s`  |                 | `1`       | Speed of Audio              |
+| `--voice`         |       | `VOICE`         | `alloy`   | Voice Used                  |
+| `--output-prefix` | `-o`  | `OUTPUT_PREFIX` | Generated | File Name Prefix            |
+
+*Vision Flags:*
+
+| Flag                   | Short | Config File Key      | Default   | Description                            |
+|------------------------|-------|----------------------|-----------|----------------------------------------|
+| `--file`               | `-f`  | `FILE`               | required  | Input image files                      |
+| `--model`              | `-m`  | `MODEL`              | `gpt-4`   | ChatGPT Model to use                   |
+| `--system-message`     |       |                      | ``        | Initial System message sent to ChatGPT |
+| `--session-file`       | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
+| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
+| `--model`              | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
+| `--role`               |       | `ROLE`               | `user`    | Role of User                           |
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 
@@ -307,4 +345,3 @@ brew upgrade
 
 docs/generate-demos.sh
 ```
-
