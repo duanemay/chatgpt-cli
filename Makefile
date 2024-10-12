@@ -56,7 +56,7 @@ setup:  ## Setup packages needed for release
 
 .PHONY: re-release-novalidate
 re-release-novalidate:  ## Recreate a release with current tag
-	goreleaser release --clean --skip-validate
+	goreleaser release --clean --skip=validate
 
 .PHONY: release-patch
 release-patch: ## Create a new patch release
