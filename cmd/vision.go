@@ -140,11 +140,11 @@ func sendVisionMessages(f *VisionFlags, chatContext *ChatContext, chatCompletion
 		MultiContent: content,
 	})
 	resp, err := client.CreateChatCompletion(context.Background(), *chatCompletionRequest)
-	successSpinner.Success()
-
 	if err != nil {
+		successSpinner.Fail(err.Error())
 		return err
 	}
+	successSpinner.Success()
 
 	for _, choice := range resp.Choices {
 		if chatContext.InteractiveSession {

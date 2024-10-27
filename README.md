@@ -196,12 +196,20 @@ The full list of available flags and corresponding config file variables:
 | Flag                   | Short | Config File Key      | Default   | Description                            |
 |------------------------|-------|----------------------|-----------|----------------------------------------|
 | `--file`               | `-f`  | `FILE`               | required  | Input image files                      |
-| `--model`              | `-m`  | `MODEL`              | `gpt-4`   | ChatGPT Model to use                   |
+| `--model`              | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
 | `--system-message`     |       |                      | ``        | Initial System message sent to ChatGPT |
 | `--session-file`       | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
 | `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
-| `--model`              | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
 | `--role`               |       | `ROLE`               | `user`    | Role of User                           |
+
+*Transcription Flags:*
+
+| Flag               | Short | Config File Key | Default     | Description                    |
+|--------------------|-------|-----------------|-------------|--------------------------------|
+| `--file`           | `-f`  | `FILE`          | required    | Input audio files              |
+| `--model`          | `-m`  | `MODEL`         | `whisper-1` | Transcription Model to use     |
+| `--language`       | `-l`  | `LANGUAGE`      | `whisper-1` | Language of the input audio    |
+| `--system-message` |       |                 | ``          | Initial Prompt sent to ChatGPT |
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 

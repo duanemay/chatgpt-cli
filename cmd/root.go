@@ -32,6 +32,7 @@ func NewRootCmd() *cobra.Command {
 	cmds.AddCommand(NewListModelsCmd(rootFlags))
 	cmds.AddCommand(NewReplaySessionCmd())
 	cmds.AddCommand(NewVersionCmd())
+	cmds.AddCommand(NewTranscriptionCmd(rootFlags))
 
 	AddConfigFileFlag(&rootFlags.configFile, cmds.PersistentFlags())
 	AddApiKeyFlag(&rootFlags.apikey, cmds.PersistentFlags())

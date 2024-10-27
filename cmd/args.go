@@ -27,6 +27,7 @@ const (
 	FlagVoice                = "voice"
 	FlagSpeed                = "speed"
 	FlagInputFile            = "file"
+	FlagLanguage             = "language"
 )
 
 const (
@@ -140,4 +141,8 @@ func AddImageSizeFlag(str *string, flags *pflag.FlagSet) {
 
 func AddImageOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {
 	flags.StringVarP(str, FlagOutputPrefix, "o", defaultName, "Prefix used for the output file names")
+}
+
+func AddLanguageFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagLanguage, "l", "", "language of the input audio")
 }
