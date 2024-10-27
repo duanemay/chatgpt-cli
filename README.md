@@ -208,7 +208,7 @@ The full list of available flags and corresponding config file variables:
 |--------------------|-------|-----------------|-------------|--------------------------------|
 | `--file`           | `-f`  | `FILE`          | required    | Input audio files              |
 | `--model`          | `-m`  | `MODEL`         | `whisper-1` | Transcription Model to use     |
-| `--language`       | `-l`  | `LANGUAGE`      | `whisper-1` | Language of the input audio    |
+| `--language`       | `-l`  | `LANGUAGE`      | detected    | Language of the input audio    |
 | `--system-message` |       |                 | ``          | Initial Prompt sent to ChatGPT |
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
@@ -229,6 +229,7 @@ The available commands are as follows:
 2. `vision`: Upload an image to ChatGPT for use in chat.
 3. `image`: Generate an image using DALL-E
 4. `speech`: Generate speech using ChatGPT
+4. `transcribe`: Transcribe audio to text using ChatGPT
 5. `completion`: Generate the autocomplete script for your chosen shell.
 6. `help`: Seek help regarding any command.
 7. `list-models`: Retrieve a list of all models available to your account.
@@ -319,6 +320,20 @@ Audio files are saved with a prefix in the form `tts-DATE-TIME-nn.mp3` where DAT
 You can control the speed of the audio with the `--speed` or `-s` flag. The speed must be between 0.25 and 4.0, inclusive.
 You can control the voice of the audio with the `--voice` or `-v` flag. The voice must be one of alloy, echo, fable, onyx, nova, or shimmer.
 You can control the TTS model with the `--model` or `-m` flag. The model must be one of tts-1, tts-1-hd, or canary-tts.
+
+### Transcribing Audio to Text
+
+Transcribe text from an audio file using the `transcribe` command:
+
+```bash
+chatgpt-cli transcribe --file audio.mp3
+```
+
+Audio files are accepted in the following formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
+
+You can indicate the language of the input audio with the `--language` or `-l` flag. Supplying the input language in ISO-639-1 format will improve accuracy and latency.
+You can control the speech to text model with the `--model` or `-m` flag. Currently only whisper-1 is allowed.
+Optional prompt to guide the model's style or continue a previous audio segment, can be set by using the `--system-message` flag. The prompt should match the audio language.
 
 ### Listing Models
 
