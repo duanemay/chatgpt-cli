@@ -213,7 +213,7 @@ The full list of available flags and corresponding config file variables:
 
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 
-You can select a different configuration file using `--config` flag. Each config file should specify settings as `KEY=VALUE` pairs, with each pair on a separate line. Lines commencing with `#` are considered comments and ignored.
+You can select a different configuration file using `--config` flag. Each config file should specify settings as `KEY=VALUE` pairs, with each pair on a separate line. Lines beginning with `#` are considered comments and ignored.
 
 ## Usage
 
@@ -310,7 +310,7 @@ Generate an audio file, reading some text using the `speech` command:
 chatgpt-cli speech
 ```
 
-You'll be prompted to input the text you would like read, which can span multiple lines. Send your description with TAB or CTRL+C.
+You'll be prompted to input the text you would like to read, which can span multiple lines. Send your description with TAB or CTRL+C.
 
 Exiting the chat is made possible by inputting CTRL+C or TAB with no description.
 

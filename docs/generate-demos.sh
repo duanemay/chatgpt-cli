@@ -4,8 +4,8 @@ set -e
 filter=${1:-*}
 
 cd docs || exit
-echo Using filter=$filter
-ls -l ${filter}-demo.tape;
+echo "Using filter=${filter}"
+ls -l "${filter}-demo.tape";
 
 rm chatgpt-cli*.json dall-e-*.png || true
 export  PS1='\[\033[31;1m\]\$\[\033[m\] '

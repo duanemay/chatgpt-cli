@@ -1,15 +1,25 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/spf13/cobra"
+	"golang.org/x/term"
 	"os"
 	"time"
 )
+
+type chatContextKey string
+
+// setChatContext sets the chatContext in the command context
+func setChatContext(cmd *cobra.Command, chatContext *ChatContext) {
+	chatContextKey := chatContextKey("chatContext")
+	cmd.SetContext(context.WithValue(context.Background(), chatContextKey, chatContext))
+}
 
 // setupOpenAIClient verifies the token exists, and creates a new OpenAI client
 func setupOpenAIClient(apikey string) (*openai.Client, error) {
@@ -22,10 +32,7 @@ func setupOpenAIClient(apikey string) (*openai.Client, error) {
 
 // detectTerminal detects if the CLI is running in a terminal or not
 func detectTerminal() bool {
-	if terminal.IsTerminal(int(os.Stdin.Fd())) {
-		return true
-	}
-	return false
+	return term.IsTerminal(int(os.Stdin.Fd()))
 }
 
 // loadOrCreateChatCompletionRequest

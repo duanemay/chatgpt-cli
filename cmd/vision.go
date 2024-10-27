@@ -23,7 +23,7 @@ func NewVisionCmd(rootFlags *RootFlags) *cobra.Command {
 		Long:  "Answer questions based on images",
 		RunE:  visionCmdRunner(rootFlags, visionFlags, chatContext),
 	}
-	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
+	setChatContext(cmd, chatContext)
 
 	AddModelFlag(&visionFlags.model, cmd.PersistentFlags())
 	AddDetailFlag(&visionFlags.DetailStr, cmd.PersistentFlags())
@@ -108,7 +108,7 @@ func sendVisionMessages(f *VisionFlags, chatContext *ChatContext, chatCompletion
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
 	mySpinner.Writer = os.Stderr
-	successSpinner, err := mySpinner.Start("Sending to ChatGPT, please wait...")
+	successSpinner, _ := mySpinner.Start("Sending to ChatGPT, please wait...")
 
 	content := []openai.ChatMessagePart{
 		{

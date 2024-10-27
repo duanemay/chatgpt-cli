@@ -19,7 +19,7 @@ func NewTranscriptionCmd(rootFlags *RootFlags) *cobra.Command {
 		Long:  "Transcribe audio to text",
 		RunE:  transcribeCmdRunner(rootFlags, transcriptionFlags, chatContext),
 	}
-	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
+	setChatContext(cmd, chatContext)
 
 	AddModelFlag(&transcriptionFlags.model, cmd.PersistentFlags())
 	AddLanguageFlag(&transcriptionFlags.language, cmd.PersistentFlags())
@@ -70,7 +70,7 @@ func sendTranscriptionMessages(f *TranscriptionFlags, chatContext *ChatContext, 
 	mySpinner.Writer = os.Stderr
 
 	for _, file := range f.inputFiles {
-		successSpinner, err := mySpinner.Start("Sending to ChatGPT, please wait...")
+		successSpinner, _ := mySpinner.Start("Sending to ChatGPT, please wait...")
 
 		resp, err := client.CreateTranscription(
 			context.Background(),

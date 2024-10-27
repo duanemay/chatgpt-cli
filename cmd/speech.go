@@ -25,7 +25,7 @@ func NewSpeechCmd(rootFlags *RootFlags) *cobra.Command {
 		Long:    "Text to speech, creates an audio file",
 		RunE:    speechCmdRunner(rootFlags, speechFlags, chatContext),
 	}
-	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
+	setChatContext(cmd, chatContext)
 
 	AddSpeechModelFlag(&speechFlags.ModelStr, cmd.PersistentFlags())
 	AddSpeedFlag(&speechFlags.Speed, cmd.PersistentFlags())
@@ -103,7 +103,7 @@ func sendSpeechMessages(f *SpeechFlags, chatContext *ChatContext, client *openai
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
 	mySpinner.Writer = os.Stderr
-	successSpinner, err := mySpinner.Start("Sending to ChatGPT TTS please wait...")
+	successSpinner, _ := mySpinner.Start("Sending to ChatGPT TTS please wait...")
 
 	imageRequest := openai.CreateSpeechRequest{
 		Model:          f.Model,
@@ -113,11 +113,11 @@ func sendSpeechMessages(f *SpeechFlags, chatContext *ChatContext, client *openai
 		Speed:          f.Speed,
 	}
 	resp, err := client.CreateSpeech(context.Background(), imageRequest)
-	successSpinner.Success()
-
 	if err != nil {
+		successSpinner.Fail(err.Error())
 		return err
 	}
+	successSpinner.Success()
 
 	fileName := getSpeechFileName(f)
 	file, err := os.Create(fileName)

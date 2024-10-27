@@ -32,7 +32,7 @@ func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
 		Long:  "Create an image using DALL·E",
 		RunE:  imageCmdRunner(rootFlags, imageFlags, chatContext),
 	}
-	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
+	setChatContext(cmd, chatContext)
 
 	AddImageModelFlag(&imageFlags.Model, cmd.PersistentFlags())
 	AddNumberImagesFlag(&imageFlags.NumberImages, cmd.PersistentFlags())
@@ -116,7 +116,7 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
 	mySpinner.Writer = os.Stderr
-	successSpinner, err := mySpinner.Start("Sending to DALL-E, please wait...")
+	successSpinner, _ := mySpinner.Start("Sending to DALL-E, please wait...")
 
 	imageRequest := openai.ImageRequest{
 		Prompt:         chatRequestString,
@@ -128,11 +128,11 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 		Style:          f.Style,
 	}
 	resp, err := client.CreateImage(context.Background(), imageRequest)
-	successSpinner.Success()
-
 	if err != nil {
+		successSpinner.Fail(err.Error())
 		return err
 	}
+	successSpinner.Success()
 
 	for _, data := range resp.Data {
 		imgBytes, err := base64.StdEncoding.DecodeString(data.B64JSON)

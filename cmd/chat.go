@@ -22,7 +22,7 @@ func NewChatCmd(rootFlags *RootFlags) *cobra.Command {
 		Long:  "Enter a chat session with ChatGPT",
 		RunE:  chatCmdRun(rootFlags, chatFlags, chatContext),
 	}
-	cmd.SetContext(context.WithValue(context.Background(), "chatContext", chatContext))
+	setChatContext(cmd, chatContext)
 
 	AddModelFlag(&chatFlags.model, cmd.PersistentFlags())
 	AddRoleFlag(&chatFlags.role, cmd.PersistentFlags())
@@ -111,18 +111,18 @@ func sendChatMessages(f *ChatFlags, chatContext *ChatContext, chatCompletionRequ
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
 	mySpinner.SetWriter(os.Stderr)
-	successSpinner, err := mySpinner.Start("Sending to ChatGPT, please wait...")
+	successSpinner, _ := mySpinner.Start("Sending to ChatGPT, please wait...")
 
 	chatCompletionRequest.Messages = append(chatCompletionRequest.Messages, openai.ChatCompletionMessage{
 		Role:    f.role,
 		Content: chatRequestString,
 	})
 	resp, err := client.CreateChatCompletion(context.Background(), *chatCompletionRequest)
-	successSpinner.Success()
-
 	if err != nil {
+		successSpinner.Fail(err.Error())
 		return err
 	}
+	successSpinner.Success()
 
 	for _, choice := range resp.Choices {
 		if chatContext.InteractiveSession {
