@@ -49,6 +49,12 @@ else
 	@echo To view coverage, open: coverage.html
 endif
 
+.PHONY: update
+update: ## Update Dependencies
+	go get -t -u ./...
+	go mod tidy
+	go run github.com/onsi/ginkgo/v2/ginkgo -r
+
 .PHONY: setup
 setup:  ## Setup packages needed for release
 	brew install caarlos0/tap/svu
