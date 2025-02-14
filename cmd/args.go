@@ -32,7 +32,7 @@ const (
 
 const (
 	defaultMaxTokens     = 0
-	defaultModel         = openai.GPT4o
+	defaultModel         = openai.GPT4oMini
 	defaultRole          = openai.ChatMessageRoleUser
 	defaultTemperature   = 1.0
 	defaultTopP          = 1.0

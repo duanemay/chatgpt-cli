@@ -160,16 +160,16 @@ The full list of available flags and corresponding config file variables:
 
 *Chat Flags:*
 
-| Flag                    | Short | Config File Key      | Default   | Description                            |
-|-------------------------|-------|----------------------|-----------|----------------------------------------|
-| `--system-message`      |       |                      | ``        | Initial System message sent to ChatGPT |
-| `--session-file`        | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
-| `--skip-write-session`  |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
-| `--model`               | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
-| `--role`                |       | `ROLE`               | `user`    | Role of User                           |
-| `--temperature`         | `-m`  | `TEMPERATURE`        | `1.0`     | Temperature: 0-2                       |
-| `--max-tokens`          |       | `MAX_TOKENS`         | `0`       | Max tokens: 8192                       |
-| `--top-p`               |       | `TOP_P`              | `1.0`     | Top P: 0-1                             |
+| Flag                   | Short | Config File Key      | Default       | Description                            |
+|------------------------|-------|----------------------|---------------|----------------------------------------|
+| `--system-message`     |       |                      | ``            | Initial System message sent to ChatGPT |
+| `--session-file`       | `-s`  | `SESSION_FILE`       | Generated     | Session file                           |
+| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false         | Do not write or update session file    |
+| `--model`              | `-m`  | `MODEL`              | `gpt-4o-mini` | Model to use (default will change)     |
+| `--role`               |       | `ROLE`               | `user`        | Role of User                           |
+| `--temperature`        | `-m`  | `TEMPERATURE`        | `1.0`         | Temperature: 0-2                       |
+| `--max-tokens`         |       | `MAX_TOKENS`         | `0`           | Max tokens: 8192                       |
+| `--top-p`              |       | `TOP_P`              | `1.0`         | Top P: 0-1                             |
 
 *Image Flags:*
 
@@ -193,14 +193,14 @@ The full list of available flags and corresponding config file variables:
 
 *Vision Flags:*
 
-| Flag                   | Short | Config File Key      | Default   | Description                            |
-|------------------------|-------|----------------------|-----------|----------------------------------------|
-| `--file`               | `-f`  | `FILE`               | required  | Input image files                      |
-| `--model`              | `-m`  | `MODEL`              | `gpt-4o`  | Model to use (default will change)     |
-| `--system-message`     |       |                      | ``        | Initial System message sent to ChatGPT |
-| `--session-file`       | `-s`  | `SESSION_FILE`       | Generated | Session file                           |
-| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false     | Do not write or update session file    |
-| `--role`               |       | `ROLE`               | `user`    | Role of User                           |
+| Flag                   | Short | Config File Key      | Default       | Description                            |
+|------------------------|-------|----------------------|---------------|----------------------------------------|
+| `--file`               | `-f`  | `FILE`               | required      | Input image files                      |
+| `--model`              | `-m`  | `MODEL`              | `gpt-4o-mini` | Model to use (default will change)     |
+| `--system-message`     |       |                      | ``            | Initial System message sent to ChatGPT |
+| `--session-file`       | `-s`  | `SESSION_FILE`       | Generated     | Session file                           |
+| `--skip-write-session` |       | `SKIP_WRITE_SESSION` | false         | Do not write or update session file    |
+| `--role`               |       | `ROLE`               | `user`        | Role of User                           |
 
 *Transcription Flags:*
 
