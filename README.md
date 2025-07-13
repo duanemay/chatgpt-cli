@@ -173,14 +173,14 @@ The full list of available flags and corresponding config file variables:
 
 *Image Flags:*
 
-| Flag               | Short | Config File Key | Default    | Description                   |
-|--------------------|-------|-----------------|------------|-------------------------------|
-| `--model`          | `-m`  | `MODEL`         | `dall-e-3` | Model to use                  |
-| `--number`         | `-n`  |                 | `1`        | Number of images to generate  |
-| `--quality`        |       | `QUALITY`       | `standard` | Image Quality                 |
-| `--size`           | `-s`  | `SIZE`          | 1024x1024  | Image Size                    |
-| `--style`          |       | `STYLE`         | `vivid`    | Image Style                   |
-| `--output-prefix`  | `-o`  | `OUTPUT_PREFIX` | Generated  | File Name Prefix              |
+| Flag              | Short | Config File Key | Default       | Description                  |
+|-------------------|-------|-----------------|---------------|------------------------------|
+| `--model`         | `-m`  | `MODEL`         | `gpt-image-1` | Model to use                 |
+| `--number`        | `-n`  |                 | `1`           | Number of images to generate |
+| `--quality`       |       | `QUALITY`       | `high`        | Image Quality                |
+| `--size`          | `-s`  | `SIZE`          | 1024x1024     | Image Size                   |
+| `--style`         |       | `STYLE`         | `vivid`       | Image Style                  |
+| `--output-prefix` | `-o`  | `OUTPUT_PREFIX` | Generated     | File Name Prefix             |
 
 *Speech Flags:*
 
@@ -227,7 +227,7 @@ The available commands are as follows:
 
 1. `chat`: Start a chat session with ChatGPT.
 2. `vision`: Upload an image to ChatGPT for use in chat.
-3. `image`: Generate an image using DALL-E
+3. `image`: Generate an image
 4. `speech`: Generate speech using ChatGPT
 4. `transcribe`: Transcribe audio to text using ChatGPT
 5. `completion`: Generate the autocomplete script for your chosen shell.
@@ -287,7 +287,7 @@ You'll be prompted to input your message, which can span multiple lines. Send yo
 
 ### Generating Images
 
-Generate an image with DALL-E using the `image` command:
+Generate an image with GPT-Image-1 or DALL-E using the `image` command:
 
 ```bash
 chatgpt-cli image
@@ -297,11 +297,11 @@ You'll be prompted to input your description of an image, which can span multipl
 
 Exiting the chat is made possible by inputting CTRL+C or TAB with no description.
 
-All images are saved with a prefix in the form `dall-e-DATE-TIME-nn.png` where DATE-TIME is the timestamp when the session started, and nn for the image number from the session. You can override the ``--output-prefix`` or `-o` flags.
+All images are saved with a prefix in the form `image-DATE-TIME-nn.png` where DATE-TIME is the timestamp when the session started, and nn for the image number from the session. You can override the ``--output-prefix`` or `-o` flags.
 
 You can control how many variants of the requested images to generate with the `--number` or `-n` flag. The Number of Images must be between 1 and 10, inclusive.
  
-You can control the size of the requested images with the `--size` or `-s` flag. The Size must be one of 256x256, 512x512, or 1024x1024.
+You can control the size of the requested images with the `--size` or `-s` flag. The allowed sizes vary based on the model used.
 
 ### Generating Text to Speech
 
