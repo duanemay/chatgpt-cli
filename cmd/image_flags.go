@@ -23,6 +23,8 @@ func NewImageFlags() *ImageFlags {
 
 func (f *ImageFlags) ValidateFlags() error {
 	switch f.Model {
+	case openai.CreateImageModelGptImage1:
+		return f.ValidateGptImage1Flags()
 	case openai.CreateImageModelDallE2:
 		return f.ValidateDalle2Flags()
 	case openai.CreateImageModelDallE3:
@@ -67,5 +69,25 @@ func (f *ImageFlags) ValidateDalle3Flags() error {
 	default:
 		return fmt.Errorf("style must be one of vivid or natural, for DALL-E 3")
 	}
+	return nil
+}
+
+func (f *ImageFlags) ValidateGptImage1Flags() error {
+	if f.NumberImages < 1 || f.NumberImages > 1 {
+		return fmt.Errorf("NumberImages must be 1, for GPT-Image-1")
+	}
+	switch f.Size {
+	case openai.CreateImageSize1024x1024, openai.CreateImageSize1536x1024, openai.CreateImageSize1024x1536:
+	// these are fine
+	default:
+		return fmt.Errorf("size must be one of 1024x1024, 1536x1024, or 1024x1536, for GPT-Image-1")
+	}
+	switch f.Quality {
+	case openai.CreateImageQualityHigh, openai.CreateImageQualityMedium, openai.CreateImageQualityLow:
+		// these are fine
+	default:
+		return fmt.Errorf("quality must be one of low, medium, or high, for GPT-Image-1")
+	}
+	// Style is not applicable for GPT-Image-1
 	return nil
 }

@@ -38,8 +38,8 @@ const (
 	defaultTopP          = 1.0
 	defaultSystemMessage = ""
 	defaultNumberImages  = 1
-	defaultImageModel    = openai.CreateImageModelDallE3
-	defaultImageQuality  = openai.CreateImageQualityStandard
+	defaultImageModel    = openai.CreateImageModelGptImage1
+	defaultImageQuality  = openai.CreateImageQualityHigh
 	defaultImageStyle    = openai.CreateImageStyleVivid
 	defaultImageSize     = openai.CreateImageSize1024x1024
 	defaultDetail        = string(openai.ImageURLDetailAuto)
@@ -124,7 +124,7 @@ func AddNumberImagesFlag(n *int, flags *pflag.FlagSet) {
 }
 
 func AddImageModelFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVarP(str, FlagImageModel, "m", defaultImageModel, "Model to use for image generation. Must be one of 'dall-e-3' or 'dall-e-2")
+	flags.StringVarP(str, FlagImageModel, "m", defaultImageModel, "Model to use for image generation. Must be one of 'gpt-image-1', 'dall-e-3', 'dall-e-2")
 }
 
 func AddImageStyleFlag(str *string, flags *pflag.FlagSet) {
@@ -132,11 +132,11 @@ func AddImageStyleFlag(str *string, flags *pflag.FlagSet) {
 }
 
 func AddImageQualityFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVar(str, FlagImageQuality, defaultImageQuality, "Quality to use for image generation. Must be one of 'standard' or 'hd' (for DALL-E 3 only)")
+	flags.StringVar(str, FlagImageQuality, defaultImageQuality, "Quality to use for image generation. Must be one of 'standard' or 'hd' (for GPT-Image-1 and DALL-E 3)")
 }
 
 func AddImageSizeFlag(str *string, flags *pflag.FlagSet) {
-	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of 256x256, 512x512, or 1024x1024 for DALL-E 2, or 1024x1024, 1792x1024, or 1024x1792 for DALL-E 3")
+	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of: 256x256, 512x512, or 1024x1024 for DALL-E 2; 1024x1024, 1792x1024, or 1024x1792 for DALL-E 3; or 1024x1024, 1024x1536, or 1536x1024 for GPT-Image-1")
 }
 
 func AddImageOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {

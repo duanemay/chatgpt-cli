@@ -28,8 +28,8 @@ func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
 	chatContext := NewChatContext()
 	var cmd = &cobra.Command{
 		Use:   "image",
-		Short: "Create an image using DALL·E",
-		Long:  "Create an image using DALL·E",
+		Short: "Create an image",
+		Long:  "Create an image",
 		RunE:  imageCmdRunner(rootFlags, imageFlags, chatContext),
 	}
 	setChatContext(cmd, chatContext)
@@ -116,17 +116,30 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	mySpinner.RemoveWhenDone = true
 	mySpinner.Writer = os.Stderr
-	successSpinner, _ := mySpinner.Start("Sending to DALL-E, please wait...")
+	destination := "DALL-E"
 
-	imageRequest := openai.ImageRequest{
-		Prompt:         chatRequestString,
-		Model:          f.Model,
-		N:              f.NumberImages,
-		Quality:        f.Quality,
-		ResponseFormat: openai.CreateImageResponseFormatB64JSON,
-		Size:           f.Size,
-		Style:          f.Style,
+	var imageRequest openai.ImageRequest
+	if f.Model == openai.CreateImageModelGptImage1 {
+		destination = "GPT-Image-1"
+		imageRequest = openai.ImageRequest{
+			Prompt:  chatRequestString,
+			Model:   f.Model,
+			N:       f.NumberImages,
+			Quality: f.Quality,
+			Size:    f.Size,
+		}
+	} else {
+		imageRequest = openai.ImageRequest{
+			Prompt:         chatRequestString,
+			Model:          f.Model,
+			N:              f.NumberImages,
+			Quality:        f.Quality,
+			ResponseFormat: openai.CreateImageResponseFormatB64JSON,
+			Size:           f.Size,
+			Style:          f.Style,
+		}
 	}
+	successSpinner, _ := mySpinner.Start("Sending to " + destination + ", please wait...")
 	resp, err := client.CreateImage(context.Background(), imageRequest)
 	if err != nil {
 		successSpinner.Fail(err.Error())

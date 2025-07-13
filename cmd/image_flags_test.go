@@ -69,6 +69,60 @@ var _ = Describe("Image Flags", func() {
 		Ω(err).Error().ToNot(HaveOccurred())
 	})
 
+	It("should validate Size, Quality, Style for GPT Image 1", func() {
+		imageFlags := cmd.NewImageFlags()
+		imageFlags.NumberImages = 1
+		imageFlags.Model = openai.CreateImageModelGptImage1
+		err := imageFlags.ValidateFlags()
+		Ω(err).Error().To(HaveOccurred())
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
+
+		imageFlags.Size = openai.CreateImageSize256x256
+		Ω(err).Error().To(HaveOccurred())
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
+
+		imageFlags.Size = openai.CreateImageSize1024x1024
+		imageFlags.Quality = openai.CreateImageQualityHD
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().To(HaveOccurred())
+		Ω(err.Error()).Should(ContainSubstring("quality must be one of"))
+
+		imageFlags.Quality = openai.CreateImageQualityStandard
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().To(HaveOccurred())
+		Ω(err.Error()).Should(ContainSubstring("quality must be one of"))
+
+		imageFlags.Size = openai.CreateImageSize512x512
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().To(HaveOccurred())
+		Ω(err.Error()).Should(ContainSubstring("size must be one of"))
+
+		imageFlags.Size = openai.CreateImageSize1024x1024
+		imageFlags.Quality = openai.CreateImageQualityHigh
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+
+		imageFlags.Quality = openai.CreateImageQualityMedium
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+
+		imageFlags.Quality = openai.CreateImageQualityLow
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+
+		imageFlags.Size = openai.CreateImageSize1536x1024
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+
+		imageFlags.Size = openai.CreateImageSize1536x1024
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+
+		imageFlags.Size = openai.CreateImageSize1024x1536
+		err = imageFlags.ValidateFlags()
+		Ω(err).Error().ToNot(HaveOccurred())
+	})
+
 	It("should validate Number of Images", func() {
 		imageFlags := cmd.NewImageFlags()
 		imageFlags.Size = openai.CreateImageSize1024x1024
