@@ -39,7 +39,7 @@ func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
 	AddImageQualityFlag(&imageFlags.Quality, cmd.PersistentFlags())
 	AddImageSizeFlag(&imageFlags.Size, cmd.PersistentFlags())
 	AddImageStyleFlag(&imageFlags.Style, cmd.PersistentFlags())
-	AddImageOutputPrefixFlag(&imageFlags.OutputPrefix, "dall-e-"+time.Now().UTC().Format(time.RFC3339), cmd.PersistentFlags())
+	AddOutputPrefixFlag(&imageFlags.OutputPrefix, "image-"+time.Now().UTC().Format(time.RFC3339), cmd.PersistentFlags())
 	_ = cmd.MarkPersistentFlagRequired("apikey")
 
 	return cmd

@@ -30,7 +30,7 @@ func NewSpeechCmd(rootFlags *RootFlags) *cobra.Command {
 	AddSpeechModelFlag(&speechFlags.ModelStr, cmd.PersistentFlags())
 	AddSpeedFlag(&speechFlags.Speed, cmd.PersistentFlags())
 	AddVoiceFlag(&speechFlags.VoiceStr, cmd.PersistentFlags())
-	AddImageOutputPrefixFlag(&speechFlags.OutputPrefix, "tts-"+time.Now().UTC().Format(time.RFC3339), cmd.PersistentFlags())
+	AddOutputPrefixFlag(&speechFlags.OutputPrefix, "tts-"+time.Now().UTC().Format(time.RFC3339), cmd.PersistentFlags())
 	_ = cmd.MarkPersistentFlagRequired("apikey")
 
 	return cmd

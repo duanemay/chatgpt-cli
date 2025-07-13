@@ -139,7 +139,7 @@ func AddImageSizeFlag(str *string, flags *pflag.FlagSet) {
 	flags.StringVarP(str, FlagImageSize, "s", defaultImageSize, "Size of the generated images. Must be one of: 256x256, 512x512, or 1024x1024 for DALL-E 2; 1024x1024, 1792x1024, or 1024x1792 for DALL-E 3; or 1024x1024, 1024x1536, or 1536x1024 for GPT-Image-1")
 }
 
-func AddImageOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {
+func AddOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) {
 	flags.StringVarP(str, FlagOutputPrefix, "o", defaultName, "Prefix used for the output file names")
 }
 
