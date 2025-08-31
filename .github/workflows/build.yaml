@@ -1,0 +1,41 @@
+name: Go CI Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Go Version
+        run: go version
+
+      - name: Set up Chat GPT CLI
+        run: |
+          echo "CHATGPT_API_KEY=${{ secrets.CHATGPT_API_KEY }}" >> $HOME/.chatgpt-cli
+
+      - name: Test
+        run: make test
+
+      - name: GoReleaser Build
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: '~> v2'
+          args: build --snapshot --clean --single-target --output .
+          workdir: .
+
+      - name: Cleanup Chat GPT CLI
+        if: always()
+        run: |
+          rm $HOME/.chatgpt-cli || true
