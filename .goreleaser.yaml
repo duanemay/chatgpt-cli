@@ -45,13 +45,18 @@ changelog:
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
-brews:
+homebrew_casks:
   - repository:
       owner: duanemay
       name: homebrew-tap
-    directory: Formula
     homepage: https://github.com/duanemay/homebrew-tap
-    description: Recursively expand archives containing other archives
+    description: ChatGPT Command-Line Interface
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/chatgpt-cli"]
+          end
 
 env_files:
   github_token: ./.github_token
