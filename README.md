@@ -95,7 +95,7 @@ To install ChatGPT CLI using Homebrew:
 
 ```bash
 brew tap duanemay/tap
-brew install chatgpt-cli
+brew install --cask chatgpt-cli
 ```
 
 ### Generating Cover Images for a directory full of notes, non-Interactively
