@@ -25,6 +25,13 @@ jobs:
       - name: Test
         run: make test
 
+      - name: GoReleaser Check
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: '~> v2'
+          args: check
+          workdir: .
+
       - name: GoReleaser Build
         uses: goreleaser/goreleaser-action@v6
         with:
