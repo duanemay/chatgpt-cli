@@ -2,12 +2,13 @@ package cmd_test
 
 import (
 	"bytes"
-	"github.com/pterm/pterm"
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
 	"io"
 	"os"
 	"sync"
+
+	"github.com/pterm/pterm"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
 func ExecuteTest(cmd *cobra.Command, args []string, input string) (output string, err error) {

@@ -4,15 +4,16 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+	"time"
+
 	os2 "github.com/duanemay/chatgpt-cli/pkg/os"
 	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"io"
-	"os"
-	"strings"
-	"time"
 )
 
 func NewSpeechCmd(rootFlags *RootFlags) *cobra.Command {
@@ -125,7 +126,7 @@ func sendSpeechMessages(f *SpeechFlags, chatContext *ChatContext, client *openai
 		fmt.Printf("File creation error: %v\n", err)
 		return err
 	}
-	defer file.Close()
+	defer func(file *os.File) { _ = file.Close() }(file)
 
 	_, err = io.Copy(file, resp)
 	if err != nil {

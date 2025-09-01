@@ -6,21 +6,23 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	os2 "github.com/duanemay/chatgpt-cli/pkg/os"
-	"github.com/sashabaranov/go-openai"
-	"golang.org/x/image/webp"
 	"image"
 	"image/jpeg"
 	"image/png"
 	"net/http"
 	"time"
 
-	"github.com/pterm/pterm"
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
+	os2 "github.com/duanemay/chatgpt-cli/pkg/os"
+	"github.com/sashabaranov/go-openai"
+	"golang.org/x/image/webp"
+
 	"io"
 	"os"
 	"strings"
+
+	"github.com/pterm/pterm"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
 func NewImageCmd(rootFlags *RootFlags) *cobra.Command {
@@ -184,7 +186,7 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 			fmt.Printf("File creation error: %v\n", err)
 			continue
 		}
-		defer file.Close()
+		defer func(file *os.File) { _ = file.Close() }(file)
 
 		if err := png.Encode(file, imgData); err != nil {
 			fmt.Printf("PNG encode error: %v\n", err)

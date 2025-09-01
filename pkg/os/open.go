@@ -2,9 +2,10 @@ package os
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"os/exec"
 	"runtime"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func OpenBrowser(url string) {

@@ -1,10 +1,11 @@
 package cmd_test
 
 import (
+	"os"
+
 	"github.com/duanemay/chatgpt-cli/cmd"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"os"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
