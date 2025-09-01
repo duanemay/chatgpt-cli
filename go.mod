@@ -1,6 +1,6 @@
 module github.com/duanemay/chatgpt-cli
 
-go 1.24
+go 1.25
 
 require (
 	github.com/onsi/ginkgo/v2 v2.23.4
