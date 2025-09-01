@@ -1,0 +1,54 @@
+name: GoReleaser Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        type: choice
+        description: Select the type of release
+        required: true
+        options:
+          - major
+          - minor
+          - patch
+        default: patch
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Go Version
+        run: go version
+
+      - name: Create Tag
+        env:
+          GITHUB_TOKEN: "${{ secrets.GH_PAT }}"
+        run: |
+          go install github.com/caarlos0/svu/v3@latest
+          release_type=${{ github.event.inputs.release_type }}
+          release_type=${release_type:-patch}
+          tag=$(svu ${release_type})
+          echo "tag: $tag"
+          git tag "$tag"
+          git push --tags     
+
+      - name: GoReleaser Release
+        uses: goreleaser/goreleaser-action@v3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GH_PAT }}"
+        with:
+          args: "release --clean"
+          version: latest
+          workdir: .
