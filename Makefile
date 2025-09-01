@@ -20,6 +20,10 @@ clean: ## Clean up artifacts
 
 .PHONY: test
 test: ## Run tests
+	go run github.com/onsi/ginkgo/v2/ginkgo -r --label-filter='!requires-api-key'
+
+.PHONY: test-all
+test-all: ## Run tests
 	go run github.com/onsi/ginkgo/v2/ginkgo -r
 
 .PHONY: docs

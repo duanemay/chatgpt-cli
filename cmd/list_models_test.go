@@ -1,6 +1,8 @@
 package cmd_test
 
 import (
+	"os"
+
 	"github.com/duanemay/chatgpt-cli/cmd"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -26,8 +28,14 @@ var _ = Describe("List Models Command", func() {
 		Ω(output).To(ContainSubstring("OpenAI API Key not set\n"))
 	})
 
-	It("should list models", func() {
-		output, _ := ExecuteTest(rootCmd, []string{commandName, "-v"}, "")
+	It("should list models", Label("requires-api-key"), func() {
+		home, _ := os.UserHomeDir()
+		configPath := home + "/.chatgpt-cli"
+		info, err := os.Stat(configPath)
+		Ω(os.IsNotExist(err)).To(BeFalse(), "config file not found")
+		Ω(info).ToNot(BeNil())
+
+		output, _ := ExecuteTest(rootCmd, []string{commandName, "-v", "-c", home + "/.chatgpt-cli"}, "")
 		Ω(output).To(ContainSubstring("gpt-4"))
 		Ω(output).To(ContainSubstring("gpt-3.5-turbo"))
 	})

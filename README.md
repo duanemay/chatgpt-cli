@@ -368,3 +368,16 @@ brew upgrade
 
 docs/generate-demos.sh
 ```
+
+## Running Tests
+
+To avoid running tests that use an API key, run:
+
+```bash
+make test
+```
+
+To run the full test suite, including ones requires an API key to be set in the HOME directory.
+```bash
+make test-all
+```
