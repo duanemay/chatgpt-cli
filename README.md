@@ -91,12 +91,61 @@ echo "Hello, I am a robot. I am here to help you with your tasks." | chatgpt-cli
 
 ## Installation
 
+### Using Homebrew (MacOS and Linux)
+
 To install ChatGPT CLI using Homebrew:
 
 ```bash
 brew tap duanemay/tap
 brew install --cask chatgpt-cli
 ```
+
+### Direct Download
+
+You can download the pre-built binary for your operating
+system and architecture from the GitHub releases page: 
+[https://github.com/duanemay/chatgpt-cli/releases](https://github.com/duanemay/chatgpt-cli/releases).
+
+Choose the command below that matches your system. 
+Each command will download the binary, make it executable, and move it to your
+/usr/local/bin directory.
+
+#### MacOS Apple Silicon
+
+```shell
+curl -L -o chatgpt-cli https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_darwin_arm64 && chmod +x chatgpt-cli && sudo mv chatgpt-cli /usr/local/bin/
+```
+
+#### MacOS Intel
+
+```shell
+curl -L -o chatgpt-cli https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_darwin_x86_64 && chmod +x chatgpt-cli && sudo mv chatgpt-cli /usr/local/bin/
+```
+
+#### Linux (x86_64)
+
+```shell
+curl -L -o chatgpt-cli https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_linux_x86_64 && chmod +x chatgpt-cli && sudo mv chatgpt-cli /usr/local/bin/
+```
+
+#### Linux (arm64)
+
+```shell
+curl -L -o chatgpt-cli https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_linux_arm64 && chmod +x chatgpt-cli && sudo mv chatgpt-cli /usr/local/bin/
+```
+
+#### Linux (i386)
+
+```shell
+curl -L -o chatgpt-cli https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_linux_i386 && chmod +x chatgpt-cli && sudo mv chatgpt-cli /usr/local/bin/
+```
+
+#### Windows
+
+Download one of the binaries below that matches your architecture, rename it to chatgpt-cli,  and add it to your PATH.
+* [chatgpt-cli_windows_arm64.exe](https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_windows_arm64.exe)
+* [chatgpt-cli_windows_i386.exe](https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_windows_i386.exe)
+* [chatgpt-cli_windows_x86_64.exe](https://github.com/duanemay/chatgpt-cli/releases/latest/download/chatgpt-cli_windows_x86_64.exe)
 
 ### Generating Cover Images for a directory full of notes, non-Interactively
 ```bash
@@ -281,7 +330,7 @@ chatgpt-cli vision --file image.jpg --file image2.jpg
 ```
 
 This will upload the image to ChatGPT for use in the chat.
-It also supports the session file, you can start a chat with `chat`, use `vision` to upload a file and then continue to ask more questions with `chat` by linking with a `--session-file` between commands.
+It also supports the session file, you can start a chat with `chat`, use `vision` to upload a file, and then continue to ask more questions with `chat` by linking with a `--session-file` between commands.
 
 You'll be prompted to input your message, which can span multiple lines. Send your message with TAB or CTRL+C.
 
