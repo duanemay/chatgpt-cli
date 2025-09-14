@@ -1,4 +1,5 @@
 # Check the documentation at https://goreleaser.com
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
 before:
   hooks:
@@ -6,6 +7,7 @@ before:
     - go mod tidy
     # you may remove this if you don't need go generate
     - go generate ./...
+
 builds:
   - ldflags: -X "github.com/duanemay/chatgpt-cli/cmd.version={{.Version}}"
     env:
@@ -14,7 +16,6 @@ builds:
       - linux
       - windows
       - darwin
-
 archives:
   - formats: [ 'binary' ]
     name_template: >-
@@ -27,6 +28,7 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
+
 changelog:
   sort: asc
   filters:
@@ -35,14 +37,12 @@ changelog:
       - '^test:'
 
 # The lines beneath this are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/use them.
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
 homebrew_casks:
   - repository:
       owner: duanemay
       name: homebrew-tap
+    binary: chatgpt-cli
     homepage: https://github.com/duanemay/homebrew-tap
     description: ChatGPT Command-Line Interface
     hooks:
