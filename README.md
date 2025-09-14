@@ -2,6 +2,43 @@
 
 The ChatGPT CLI allows you to interact with ChatGPT directly from your command line, offering an efficient platform for real-time communication. This user guide will provide you with simple, straightforward instructions on how to install, set up, and effectively use the CLI.
 
+## Table of Contents
+<!-- TOC -->
+* [User Guide - ChatGPT Command-Line Interface (CLI)](#user-guide---chatgpt-command-line-interface-cli)
+  * [Table of Contents](#table-of-contents)
+  * [Examples](#examples)
+    * [Simple Interactive Chat](#simple-interactive-chat)
+    * [Ask a Question, non-Interactively](#ask-a-question-non-interactively)
+    * [Improving README, non-Interactively](#improving-readme-non-interactively)
+    * [Editing a directory full of notes, non-Interactively](#editing-a-directory-full-of-notes-non-interactively)
+    * [Image Generation and Vision Chat](#image-generation-and-vision-chat)
+    * [Generate an Image, non-Interactively](#generate-an-image-non-interactively)
+    * [Generate an Audio file from Text (Text to Speech)](#generate-an-audio-file-from-text-text-to-speech)
+  * [Installation](#installation)
+    * [Using Homebrew (MacOS and Linux)](#using-homebrew-macos-and-linux)
+    * [Direct Download](#direct-download)
+      * [MacOS Apple Silicon](#macos-apple-silicon)
+      * [MacOS Intel](#macos-intel)
+      * [Linux (x86_64)](#linux-x86_64)
+      * [Linux (arm64)](#linux-arm64)
+      * [Linux (i386)](#linux-i386)
+      * [Windows](#windows)
+    * [Generating Cover Images for a directory full of notes, non-Interactively](#generating-cover-images-for-a-directory-full-of-notes-non-interactively)
+  * [Initial Set Up](#initial-set-up)
+  * [Configuration Settings](#configuration-settings)
+  * [Usage](#usage)
+    * [Chatting](#chatting)
+    * [Replaying a Session](#replaying-a-session)
+    * [Refer to an image in a Chat](#refer-to-an-image-in-a-chat)
+    * [Generating Images](#generating-images)
+    * [Generating Text to Speech](#generating-text-to-speech)
+    * [Transcribing Audio to Text](#transcribing-audio-to-text)
+    * [Listing Models](#listing-models)
+    * [Checking the Version](#checking-the-version)
+  * [Build and Release](#build-and-release)
+  * [Running Tests](#running-tests)
+<!-- TOC -->
+
 ## Examples
 
 ### Simple Interactive Chat
@@ -97,7 +134,15 @@ To install ChatGPT CLI using Homebrew:
 
 ```bash
 brew tap duanemay/tap
-brew install --cask chatgpt-cli
+brew install --cask duanemay/tap/chatgpt-cli
+```
+
+If you currently have ChatGPT CLI installed via Homebrew formula, 
+please run these steps to migrate to the cask:
+
+```bash
+brew uninstall duanemay/tap/chatgpt-cli
+brew install --cask duanemay/tap/chatgpt-cli
 ```
 
 ### Direct Download
