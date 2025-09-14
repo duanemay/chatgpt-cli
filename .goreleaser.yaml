@@ -49,7 +49,13 @@ homebrew_casks:
       post:
         install: |
           if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/chatgpt-cli"]
+           arch = Hardware::CPU.arch
+           binary_name = if arch == :arm64
+             "chatgpt-cli_darwin_arm64"
+            else
+              "chatgpt-cli_darwin_x86_64"
+            end
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/#{binary_name}"]
           end
 
 env_files:
