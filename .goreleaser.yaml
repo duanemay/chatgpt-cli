@@ -42,7 +42,7 @@ homebrew_casks:
   - repository:
       owner: duanemay
       name: homebrew-tap
-    binary: chatgpt-cli
+    binaries: [ chatgpt-cli ]
     homepage: https://github.com/duanemay/homebrew-tap
     description: ChatGPT Command-Line Interface
     hooks:
