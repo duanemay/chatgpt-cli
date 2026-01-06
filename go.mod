@@ -3,7 +3,7 @@ module github.com/duanemay/chatgpt-cli
 go 1.25
 
 require (
-	github.com/onsi/ginkgo/v2 v2.27.2
+	github.com/onsi/ginkgo/v2 v2.27.3
 	github.com/onsi/gomega v1.38.3
 	github.com/pkg/errors v0.9.1
 	github.com/pterm/pterm v0.12.82
