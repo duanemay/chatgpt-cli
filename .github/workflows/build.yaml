@@ -8,16 +8,30 @@ on:
     branches: [ "main" ]
 
 jobs:
+  go-versions:
+    name: Lookup Go versions
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: arnested/go-version-action@v2
+        id: versions
 
   build:
+    name: Test
     runs-on: ubuntu-latest
+    needs: go-versions
+    strategy:
+      matrix:
+        version: ${{ fromJSON(needs.go-versions.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: 'go.mod'
+          go-version: ${{ matrix.version }}
 
       - name: Go Version
         run: go version
