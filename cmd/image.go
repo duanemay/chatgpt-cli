@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -17,11 +16,8 @@ import (
 	"github.com/sashabaranov/go-openai"
 	"golang.org/x/image/webp"
 
-	"io"
 	"os"
-	"strings"
 
-	"github.com/pterm/pterm"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -66,25 +62,8 @@ func imageCmdRunner(rootFlags *RootFlags, imageFlags *ImageFlags, chatContext *C
 		}
 
 		reader := bufio.NewReader(os.Stdin)
-		var chatRequestString string
 		for {
-			if chatContext.InteractiveSession {
-				chatRequestString, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Enter description of the desired image").WithMultiLine().Show() // Text input with multi line enabled
-			} else {
-				var lines []string
-				for {
-					line, err := reader.ReadString('\n')
-					log.WithError(err).Debugf("readString returned")
-					if err != nil && !errors.Is(err, io.EOF) {
-						log.WithError(err).Fatal()
-					} else if errors.Is(err, io.EOF) {
-						break
-					}
-
-					lines = append(lines, line)
-				}
-				chatRequestString = strings.Join(lines, "\n")
-			}
+			chatRequestString := readUserInput(chatContext, reader, "Enter description of the desired image")
 			if len(chatRequestString) == 0 {
 				ErrorFmt.Printf("No Image Request to Send, exiting...\n")
 				return nil
@@ -115,10 +94,7 @@ func printImageBanner(f *ImageFlags) {
 
 // sendMessages sends messages to ChatGPT and prints the response
 func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.Client, chatRequestString string) error {
-	mySpinner := pterm.DefaultSpinner
-	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
-	mySpinner.RemoveWhenDone = true
-	mySpinner.Writer = os.Stderr
+	mySpinner := newSpinner()
 	destination := "DALL-E"
 
 	var imageRequest openai.ImageRequest

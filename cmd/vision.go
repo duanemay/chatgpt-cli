@@ -4,13 +4,9 @@ import (
 	"bufio"
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
-	"io"
 	"os"
-	"strings"
 
-	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -67,24 +63,7 @@ func visionCmdRunner(rootFlags *RootFlags, visionFlags *VisionFlags, chatContext
 		}
 
 		reader := bufio.NewReader(os.Stdin)
-		var chatRequestString string
-		if chatContext.InteractiveSession {
-			chatRequestString, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Enter Message").WithMultiLine().Show() // Text input with multi line enabled
-		} else {
-			var lines []string
-			for {
-				line, err := reader.ReadString('\n')
-				log.WithError(err).Debugf("readString returned")
-				if err != nil && !errors.Is(err, io.EOF) {
-					log.WithError(err).Fatal()
-				} else if errors.Is(err, io.EOF) {
-					break
-				}
-
-				lines = append(lines, line)
-			}
-			chatRequestString = strings.Join(lines, "\n")
-		}
+		chatRequestString := readUserInput(chatContext, reader, "Enter Message")
 		if len(chatRequestString) == 0 {
 			ErrorFmt.Printf("No Message to Send, exiting...\n")
 			return nil
@@ -111,10 +90,7 @@ func printVisionBanner(f *VisionFlags) {
 
 // sendVisionMessages sends messages to ChatGPT and prints the response
 func sendVisionMessages(f *VisionFlags, chatContext *ChatContext, chatCompletionRequest *openai.ChatCompletionRequest, client *openai.Client, chatRequestString string) error {
-	mySpinner := pterm.DefaultSpinner
-	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
-	mySpinner.RemoveWhenDone = true
-	mySpinner.Writer = os.Stderr
+	mySpinner := newSpinner()
 	successSpinner, _ := mySpinner.Start("Sending to ChatGPT, please wait...")
 
 	content := []openai.ChatMessagePart{

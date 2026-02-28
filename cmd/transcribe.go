@@ -3,9 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
-	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -65,10 +63,7 @@ func printTranscriptionBanner(f *TranscriptionFlags) {
 
 // sendVisionMessages sends messages to ChatGPT and prints the response
 func sendTranscriptionMessages(f *TranscriptionFlags, chatContext *ChatContext, client *openai.Client) error {
-	mySpinner := pterm.DefaultSpinner
-	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
-	mySpinner.RemoveWhenDone = true
-	mySpinner.Writer = os.Stderr
+	mySpinner := newSpinner()
 
 	for _, file := range f.inputFiles {
 		successSpinner, _ := mySpinner.Start("Sending to ChatGPT, please wait...")

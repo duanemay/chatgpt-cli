@@ -1,12 +1,17 @@
 package cmd
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"os"
+	"strings"
 
-	"github.com/pkg/errors"
+	pkgerrors "github.com/pkg/errors"
+	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -24,7 +29,7 @@ func setChatContext(cmd *cobra.Command, chatContext *ChatContext) {
 // setupOpenAIClient verifies the token exists, and creates a new OpenAI client
 func setupOpenAIClient(apikey string) (*openai.Client, error) {
 	if apikey == "" {
-		return nil, errors.Errorf("OpenAI API Key not set")
+		return nil, pkgerrors.Errorf("OpenAI API Key not set")
 	}
 	client := openai.NewClient(apikey)
 	return client, nil
@@ -105,4 +110,34 @@ func writeSessionFile(f *ChatFlags, chat *openai.ChatCompletionRequest) {
 	if err != nil {
 		log.WithError(err).Fatal()
 	}
+}
+
+// readUserInput reads user input either interactively via pterm or from stdin.
+// promptText is the text shown in interactive mode.
+func readUserInput(chatContext *ChatContext, reader *bufio.Reader, promptText string) string {
+	if chatContext.InteractiveSession {
+		text, _ := pterm.DefaultInteractiveTextInput.WithDefaultText(promptText).WithMultiLine().Show()
+		return text
+	}
+	var lines []string
+	for {
+		line, err := reader.ReadString('\n')
+		log.WithError(err).Debugf("readString returned")
+		if err != nil && !errors.Is(err, io.EOF) {
+			log.WithError(err).Fatal()
+		} else if errors.Is(err, io.EOF) {
+			break
+		}
+		lines = append(lines, line)
+	}
+	return strings.Join(lines, "\n")
+}
+
+// newSpinner creates a configured spinner that writes to stderr
+func newSpinner() pterm.SpinnerPrinter {
+	s := pterm.DefaultSpinner
+	s.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
+	s.RemoveWhenDone = true
+	s.Writer = os.Stderr
+	return s
 }

@@ -3,15 +3,12 @@ package cmd
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"time"
 
 	os2 "github.com/duanemay/chatgpt-cli/pkg/os"
-	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -56,27 +53,10 @@ func speechCmdRunner(rootFlags *RootFlags, speechFlags *SpeechFlags, chatContext
 		}
 
 		reader := bufio.NewReader(os.Stdin)
-		var chatRequestString string
 		for {
-			if chatContext.InteractiveSession {
-				chatRequestString, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Enter description of the desired image").WithMultiLine().Show() // Text input with multi line enabled
-			} else {
-				var lines []string
-				for {
-					line, err := reader.ReadString('\n')
-					log.WithError(err).Debugf("readString returned")
-					if err != nil && !errors.Is(err, io.EOF) {
-						log.WithError(err).Fatal()
-					} else if errors.Is(err, io.EOF) {
-						break
-					}
-
-					lines = append(lines, line)
-				}
-				chatRequestString = strings.Join(lines, "\n")
-			}
+			chatRequestString := readUserInput(chatContext, reader, "Enter text for speech generation")
 			if len(chatRequestString) == 0 {
-				ErrorFmt.Printf("No Image Request to Send, exiting...\n")
+				ErrorFmt.Printf("No Text to Send, exiting...\n")
 				return nil
 			}
 
@@ -101,10 +81,7 @@ func printSpeechBanner(f *SpeechFlags) {
 
 // sendMessages sends messages to ChatGPT and prints the response
 func sendSpeechMessages(f *SpeechFlags, chatContext *ChatContext, client *openai.Client, chatRequestString string) error {
-	mySpinner := pterm.DefaultSpinner
-	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
-	mySpinner.RemoveWhenDone = true
-	mySpinner.Writer = os.Stderr
+	mySpinner := newSpinner()
 	successSpinner, _ := mySpinner.Start("Sending to ChatGPT TTS please wait...")
 
 	imageRequest := openai.CreateSpeechRequest{

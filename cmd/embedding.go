@@ -4,13 +4,9 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"os"
-	"strings"
 
-	"github.com/pterm/pterm"
 	"github.com/sashabaranov/go-openai"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -53,25 +49,8 @@ func embeddingCmdRunner(rootFlags *RootFlags, embeddingFlags *EmbeddingFlags, ch
 		}
 
 		reader := bufio.NewReader(os.Stdin)
-		var inputText string
 		for {
-			if chatContext.InteractiveSession {
-				inputText, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Enter text to generate embeddings for").WithMultiLine().Show()
-			} else {
-				var lines []string
-				for {
-					line, err := reader.ReadString('\n')
-					log.WithError(err).Debugf("readString returned")
-					if err != nil && !errors.Is(err, io.EOF) {
-						log.WithError(err).Fatal()
-					} else if errors.Is(err, io.EOF) {
-						break
-					}
-
-					lines = append(lines, line)
-				}
-				inputText = strings.Join(lines, "\n")
-			}
+			inputText := readUserInput(chatContext, reader, "Enter text to generate embeddings for")
 			if len(inputText) == 0 {
 				ErrorFmt.Printf("No text to embed, exiting...\n")
 				return nil
@@ -102,10 +81,7 @@ func printEmbeddingBanner(f *EmbeddingFlags) {
 
 // sendEmbeddingRequest sends text to the OpenAI embeddings API and prints the response
 func sendEmbeddingRequest(f *EmbeddingFlags, client *openai.Client, inputText string) error {
-	mySpinner := pterm.DefaultSpinner
-	mySpinner.Sequence = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
-	mySpinner.RemoveWhenDone = true
-	mySpinner.Writer = os.Stderr
+	mySpinner := newSpinner()
 	successSpinner, _ := mySpinner.Start("Sending to OpenAI Embeddings API, please wait...")
 
 	embeddingReq := openai.EmbeddingRequest{
