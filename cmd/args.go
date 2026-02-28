@@ -33,23 +33,23 @@ const (
 )
 
 const (
-	defaultMaxTokens      = 0
-	defaultModel          = openai.GPT5
-	defaultRole           = openai.ChatMessageRoleUser
-	defaultTemperature    = 1.0
-	defaultTopP           = 1.0
-	defaultSystemMessage  = ""
-	defaultNumberImages   = 1
-	defaultImageModel     = openai.CreateImageModelGptImage1
-	defaultImageQuality   = openai.CreateImageQualityHigh
-	defaultImageStyle     = openai.CreateImageStyleVivid
-	defaultImageSize      = openai.CreateImageSize1024x1024
-	defaultDetail         = string(openai.ImageURLDetailAuto)
-	defaultSpeed          = 1.0
-	defaultVoice          = string(openai.VoiceAlloy)
-	defaultSpeechModel    = string(openai.TTSModel1)
-	defaultEmbeddingModel = string(openai.SmallEmbedding3)
-	defaultDimensions     = 0
+	defaultMaxCompletionTokens = 0
+	defaultModel               = openai.GPT5
+	defaultRole                = openai.ChatMessageRoleUser
+	defaultTemperature         = 1.0
+	defaultTopP                = 1.0
+	defaultSystemMessage       = ""
+	defaultNumberImages        = 1
+	defaultImageModel          = openai.CreateImageModelGptImage1
+	defaultImageQuality        = openai.CreateImageQualityHigh
+	defaultImageStyle          = openai.CreateImageStyleVivid
+	defaultImageSize           = openai.CreateImageSize1024x1024
+	defaultDetail              = string(openai.ImageURLDetailAuto)
+	defaultSpeed               = 1.0
+	defaultVoice               = string(openai.VoiceAlloy)
+	defaultSpeechModel         = string(openai.TTSModel1)
+	defaultEmbeddingModel      = string(openai.SmallEmbedding3)
+	defaultDimensions          = 0
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -115,8 +115,8 @@ func AddTemperatureFlag(f *float32, flags *pflag.FlagSet) {
 	flags.Float32Var(f, FlagTemperature, defaultTemperature, "Temperature, between 0 and 2. Higher values make the output more random")
 }
 
-func AddMaxTokensFlag(i *int, flags *pflag.FlagSet) {
-	flags.IntVar(i, FlagMaxTokens, defaultMaxTokens, "Maximum number of tokens to generate (default 0, no limit)")
+func AddMaxCompletionTokensFlag(i *int, flags *pflag.FlagSet) {
+	flags.IntVar(i, FlagMaxTokens, defaultMaxCompletionTokens, "Maximum number of tokens to generate (default 0, no limit)")
 }
 
 func AddTopPFlag(f *float32, flags *pflag.FlagSet) {

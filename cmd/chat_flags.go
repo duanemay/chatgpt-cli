@@ -7,7 +7,7 @@ type ChatFlags struct {
 	sessionFile          string
 	skipWriteSessionFile bool
 	temperature          float32
-	maxTokens            int
+	maxCompletionTokens  int
 	topP                 float32
 }
 
@@ -23,8 +23,8 @@ func ChatFlagsFromVisionFlags(f *VisionFlags) *ChatFlags {
 		sessionFile:          f.sessionFile,
 		skipWriteSessionFile: f.skipWriteSessionFile,
 
-		temperature: defaultTemperature,
-		maxTokens:   defaultMaxTokens,
-		topP:        defaultTopP,
+		temperature:         defaultTemperature,
+		maxCompletionTokens: defaultMaxCompletionTokens,
+		topP:                defaultTopP,
 	}
 }

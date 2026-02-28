@@ -32,7 +32,7 @@ func NewChatCmd(rootFlags *RootFlags) *cobra.Command {
 	AddSkipWriteSessionFileFlag(&chatFlags.skipWriteSessionFile, cmd.PersistentFlags())
 	AddInitialSystemMessageFlag(&chatFlags.initialSystemMessage, cmd.PersistentFlags())
 	AddTemperatureFlag(&chatFlags.temperature, cmd.PersistentFlags())
-	AddMaxTokensFlag(&chatFlags.maxTokens, cmd.PersistentFlags())
+	AddMaxCompletionTokensFlag(&chatFlags.maxCompletionTokens, cmd.PersistentFlags())
 	AddTopPFlag(&chatFlags.topP, cmd.PersistentFlags())
 	_ = cmd.MarkPersistentFlagRequired(FlagApiKey)
 
@@ -102,7 +102,7 @@ func chatCmdRun(rootFlags *RootFlags, chatFlags *ChatFlags, chatContext *ChatCon
 
 func printBanner(f *ChatFlags) {
 	TitleFmt.Printf("ChatGPT CLI v%s\n", version)
-	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", f.model, f.role, f.temperature, f.maxTokens, f.topP)
+	fmt.Printf("model: %s, role: %s, temp: %0.1f, maxtok: %d, topp: %0.1f\n", f.model, f.role, f.temperature, f.maxCompletionTokens, f.topP)
 	fmt.Printf("- Press TAB after entering a message to send.\n")
 	fmt.Printf("- Press TAB or CTRL+C with a blank message to terminate the session without sending.\n")
 }

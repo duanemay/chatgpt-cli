@@ -54,7 +54,7 @@ func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *
 			// update the chat parameters from the flags
 			chat.Model = f.model
 			chat.Temperature = f.temperature
-			chat.MaxTokens = f.maxTokens
+			chat.MaxCompletionTokens = f.maxCompletionTokens
 			chat.TopP = f.topP
 		}
 	}
@@ -62,11 +62,11 @@ func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *
 	// if a sessionFile was not provided, or it did not exist, create a new session
 	if chat == nil {
 		chat = &openai.ChatCompletionRequest{
-			Model:       f.model,
-			Messages:    []openai.ChatCompletionMessage{},
-			Temperature: f.temperature,
-			MaxTokens:   f.maxTokens,
-			TopP:        f.topP,
+			Model:               f.model,
+			Messages:            []openai.ChatCompletionMessage{},
+			Temperature:         f.temperature,
+			MaxCompletionTokens: f.maxCompletionTokens,
+			TopP:                f.topP,
 		}
 		if chatContext.InteractiveSession && shouldWriteSession(f) {
 			fmt.Printf("  session will be saved to: %s\n", f.sessionFile)
