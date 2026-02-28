@@ -30,6 +30,7 @@ func NewRootCmd() *cobra.Command {
 	cmds.AddCommand(NewChatCmd(rootFlags))
 	cmds.AddCommand(NewVisionCmd(rootFlags))
 	cmds.AddCommand(NewSpeechCmd(rootFlags))
+	cmds.AddCommand(NewEmbeddingCmd(rootFlags))
 	cmds.AddCommand(NewListModelsCmd(rootFlags))
 	cmds.AddCommand(NewReplaySessionCmd())
 	cmds.AddCommand(NewVersionCmd())
