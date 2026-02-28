@@ -3,6 +3,7 @@ package cmd
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -68,9 +69,9 @@ func chatCmdRun(rootFlags *RootFlags, chatFlags *ChatFlags, chatContext *ChatCon
 				for {
 					line, err := reader.ReadString('\n')
 					log.WithError(err).Debugf("readString returned")
-					if err != nil && err != io.EOF {
+					if err != nil && !errors.Is(err, io.EOF) {
 						log.WithError(err).Fatal()
-					} else if err == io.EOF {
+					} else if errors.Is(err, io.EOF) {
 						break
 					}
 

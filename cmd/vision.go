@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -74,9 +75,9 @@ func visionCmdRunner(rootFlags *RootFlags, visionFlags *VisionFlags, chatContext
 			for {
 				line, err := reader.ReadString('\n')
 				log.WithError(err).Debugf("readString returned")
-				if err != nil && err != io.EOF {
+				if err != nil && !errors.Is(err, io.EOF) {
 					log.WithError(err).Fatal()
-				} else if err == io.EOF {
+				} else if errors.Is(err, io.EOF) {
 					break
 				}
 
