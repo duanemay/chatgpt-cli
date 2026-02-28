@@ -40,7 +40,7 @@ func detectTerminal() bool {
 // if a sessionFile is provided, and it does not exist, then it is created
 // if a sessionFile is not provided, then a new session and sessionFile is created
 func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *openai.ChatCompletionRequest {
-	var chat *openai.ChatCompletionRequest = nil
+	var chat *openai.ChatCompletionRequest
 
 	// if a sessionFile is provided, check if it exists
 	if f.sessionFile != "" {
@@ -101,7 +101,7 @@ func writeSessionFile(f *ChatFlags, chat *openai.ChatCompletionRequest) {
 	if err != nil {
 		log.WithError(err).Fatal()
 	}
-	err = os.WriteFile(f.sessionFile, objJson, os.ModePerm)
+	err = os.WriteFile(f.sessionFile, objJson, 0600)
 	if err != nil {
 		log.WithError(err).Fatal()
 	}
