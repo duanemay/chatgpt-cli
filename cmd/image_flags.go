@@ -49,7 +49,7 @@ func (f *ImageFlags) ValidateDalle2Flags() error {
 }
 
 func (f *ImageFlags) ValidateDalle3Flags() error {
-	if f.NumberImages < 1 || f.NumberImages > 1 {
+	if f.NumberImages != 1 {
 		return fmt.Errorf("NumberImages must be 1, for DALL-E 3")
 	}
 	switch f.Size {
@@ -74,7 +74,7 @@ func (f *ImageFlags) ValidateDalle3Flags() error {
 }
 
 func (f *ImageFlags) ValidateGptImage1Flags() error {
-	if f.NumberImages < 1 || f.NumberImages > 1 {
+	if f.NumberImages != 1 {
 		return fmt.Errorf("NumberImages must be 1, for GPT-Image-1")
 	}
 	switch f.Size {
