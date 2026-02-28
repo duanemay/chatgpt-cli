@@ -28,24 +28,28 @@ const (
 	FlagSpeed                = "speed"
 	FlagInputFile            = "file"
 	FlagLanguage             = "language"
+	FlagEmbeddingModel       = "model"
+	FlagDimensions           = "dimensions"
 )
 
 const (
-	defaultMaxTokens     = 0
-	defaultModel         = openai.GPT5
-	defaultRole          = openai.ChatMessageRoleUser
-	defaultTemperature   = 1.0
-	defaultTopP          = 1.0
-	defaultSystemMessage = ""
-	defaultNumberImages  = 1
-	defaultImageModel    = openai.CreateImageModelGptImage1
-	defaultImageQuality  = openai.CreateImageQualityHigh
-	defaultImageStyle    = openai.CreateImageStyleVivid
-	defaultImageSize     = openai.CreateImageSize1024x1024
-	defaultDetail        = string(openai.ImageURLDetailAuto)
-	defaultSpeed         = 1.0
-	defaultVoice         = string(openai.VoiceAlloy)
-	defaultSpeechModel   = string(openai.TTSModel1)
+	defaultMaxTokens      = 0
+	defaultModel          = openai.GPT5
+	defaultRole           = openai.ChatMessageRoleUser
+	defaultTemperature    = 1.0
+	defaultTopP           = 1.0
+	defaultSystemMessage  = ""
+	defaultNumberImages   = 1
+	defaultImageModel     = openai.CreateImageModelGptImage1
+	defaultImageQuality   = openai.CreateImageQualityHigh
+	defaultImageStyle     = openai.CreateImageStyleVivid
+	defaultImageSize      = openai.CreateImageSize1024x1024
+	defaultDetail         = string(openai.ImageURLDetailAuto)
+	defaultSpeed          = 1.0
+	defaultVoice          = string(openai.VoiceAlloy)
+	defaultSpeechModel    = string(openai.TTSModel1)
+	defaultEmbeddingModel = string(openai.SmallEmbedding3)
+	defaultDimensions     = 0
 )
 
 // AddConfigFileFlag initialises the ConfigFile flag.
@@ -145,4 +149,12 @@ func AddOutputPrefixFlag(str *string, defaultName string, flags *pflag.FlagSet) 
 
 func AddLanguageFlag(str *string, flags *pflag.FlagSet) {
 	flags.StringVarP(str, FlagLanguage, "l", "", "language of the input audio")
+}
+
+func AddEmbeddingModelFlag(str *string, flags *pflag.FlagSet) {
+	flags.StringVarP(str, FlagEmbeddingModel, "m", defaultEmbeddingModel, "Embedding model to use. Must be one of text-embedding-3-small, text-embedding-3-large, or text-embedding-ada-002")
+}
+
+func AddDimensionsFlag(i *int, flags *pflag.FlagSet) {
+	flags.IntVarP(i, FlagDimensions, "d", defaultDimensions, "Number of dimensions for the output embeddings (0 for model default)")
 }

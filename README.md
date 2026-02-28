@@ -14,6 +14,7 @@ The ChatGPT CLI allows you to interact with ChatGPT directly from your command l
     * [Image Generation and Vision Chat](#image-generation-and-vision-chat)
     * [Generate an Image, non-Interactively](#generate-an-image-non-interactively)
     * [Generate an Audio file from Text (Text to Speech)](#generate-an-audio-file-from-text-text-to-speech)
+    * [Generate Embeddings](#generate-embeddings)
   * [Installation](#installation)
     * [Using Homebrew (MacOS and Linux)](#using-homebrew-macos-and-linux)
     * [Direct Download](#direct-download)
@@ -33,6 +34,7 @@ The ChatGPT CLI allows you to interact with ChatGPT directly from your command l
     * [Generating Images](#generating-images)
     * [Generating Text to Speech](#generating-text-to-speech)
     * [Transcribing Audio to Text](#transcribing-audio-to-text)
+    * [Generating Embeddings](#generating-embeddings)
     * [Listing Models](#listing-models)
     * [Checking the Version](#checking-the-version)
   * [Build and Release](#build-and-release)
@@ -124,6 +126,20 @@ And similarly, you can do this non-Interactively
 
 ```bash
 echo "Hello, I am a robot. I am here to help you with your tasks." | chatgpt-cli speech
+```
+
+### Generate Embeddings
+
+```bash
+echo "The quick brown fox jumps over the lazy dog" | chatgpt-cli embedding
+```
+
+This will generate an embedding vector for the input text. The output is JSON containing the model, dimensions, embedding vectors, and token usage.
+
+You can also specify a different model or custom dimensions:
+
+```bash
+echo "The quick brown fox jumps over the lazy dog" | chatgpt-cli embedding --model text-embedding-3-large --dimensions 256
 ```
 
 ## Installation
@@ -305,6 +321,13 @@ The full list of available flags and corresponding config file variables:
 | `--language`       | `-l`  | `LANGUAGE`      | detected    | Language of the input audio    |
 | `--system-message` |       |                 | ``          | Initial Prompt sent to ChatGPT |
 
+*Embedding Flags:*
+
+| Flag             | Short | Config File Key | Default                    | Description                                                                                        |
+|------------------|-------|-----------------|----------------------------|----------------------------------------------------------------------------------------------------|
+| `--model`        | `-m`  | `MODEL`         | `text-embedding-3-small`   | Embedding model to use. Must be one of text-embedding-3-small, text-embedding-3-large, or text-embedding-ada-002 |
+| `--dimensions`   | `-d`  | `DIMENSIONS`    | `0` (model default)        | Number of dimensions for the output embeddings                                                     |
+
 For instance, if you want to change the end of the message and session markers, modify them in your configuration file.
 
 You can select a different configuration file using `--config` flag. Each config file should specify settings as `KEY=VALUE` pairs, with each pair on a separate line. Lines beginning with `#` are considered comments and ignored.
@@ -324,6 +347,7 @@ The available commands are as follows:
 3. `image`: Generate an image
 4. `speech`: Generate speech using ChatGPT
 4. `transcribe`: Transcribe audio to text using ChatGPT
+5. `embedding`: Generate embeddings for input text
 5. `completion`: Generate the autocomplete script for your chosen shell.
 6. `help`: Seek help regarding any command.
 7. `list-models`: Retrieve a list of all models available to your account.
@@ -428,6 +452,34 @@ Audio files are accepted in the following formats: flac, mp3, mp4, mpeg, mpga, m
 You can indicate the language of the input audio with the `--language` or `-l` flag. Supplying the input language in ISO-639-1 format will improve accuracy and latency.
 You can control the speech to text model with the `--model` or `-m` flag. Currently only whisper-1 is allowed.
 Optional prompt to guide the model's style or continue a previous audio segment, can be set by using the `--system-message` flag. The prompt should match the audio language.
+
+### Generating Embeddings
+
+Generate embeddings for input text using the `embedding` command:
+
+```bash
+chatgpt-cli embedding
+```
+
+You'll be prompted to input your text, which can span multiple lines. Send your text with TAB or CTRL+C.
+
+The output is a JSON object containing the model used, the number of dimensions, the embedding vector(s), and token usage information.
+
+You can control the embedding model with the `--model` or `-m` flag. The model must be one of `text-embedding-3-small`, `text-embedding-3-large`, or `text-embedding-ada-002`.
+
+You can control the number of output dimensions with the `--dimensions` or `-d` flag. Set to `0` (the default) to use the model's default dimensions. This is useful for reducing the size of the embedding vectors when using `text-embedding-3-small` or `text-embedding-3-large`.
+
+You can also pipe text directly:
+
+```bash
+echo "Some text to embed" | chatgpt-cli embedding
+```
+
+The command also supports the alias `embed`:
+
+```bash
+echo "Some text to embed" | chatgpt-cli embed
+```
 
 ### Listing Models
 
