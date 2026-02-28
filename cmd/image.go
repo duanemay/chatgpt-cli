@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -74,9 +75,9 @@ func imageCmdRunner(rootFlags *RootFlags, imageFlags *ImageFlags, chatContext *C
 				for {
 					line, err := reader.ReadString('\n')
 					log.WithError(err).Debugf("readString returned")
-					if err != nil && err != io.EOF {
+					if err != nil && !errors.Is(err, io.EOF) {
 						log.WithError(err).Fatal()
-					} else if err == io.EOF {
+					} else if errors.Is(err, io.EOF) {
 						break
 					}
 
@@ -150,51 +151,9 @@ func sendImageMessages(f *ImageFlags, chatContext *ChatContext, client *openai.C
 	successSpinner.Success()
 
 	for _, data := range resp.Data {
-		imgBytes, err := base64.StdEncoding.DecodeString(data.B64JSON)
-		if err != nil {
-			fmt.Printf("Base64 decode error: %v\n", err)
+		if err := processImageData(data, f, chatContext); err != nil {
+			fmt.Printf("%v\n", err)
 			continue
-		}
-
-		r := bytes.NewReader(imgBytes)
-		contentType := http.DetectContentType(imgBytes)
-		var imgData image.Image
-		switch contentType {
-		case "image/png":
-			imgData, err = png.Decode(r)
-			if err != nil {
-				fmt.Printf("PNG decode error: %v\n", err)
-				continue
-			}
-		case "image/jpeg":
-			imgData, err = jpeg.Decode(r)
-			if err != nil {
-				fmt.Printf("JPEG decode error: %v\n", err)
-				continue
-			}
-		case "image/webp":
-			imgData, err = webp.Decode(r)
-			if err != nil {
-				fmt.Printf("WebP decode error: %v\n", err)
-				continue
-			}
-		}
-
-		fileName := getImageFileName(f)
-		file, err := os.Create(fileName)
-		if err != nil {
-			fmt.Printf("File creation error: %v\n", err)
-			continue
-		}
-		defer func(file *os.File) { _ = file.Close() }(file)
-
-		if err := png.Encode(file, imgData); err != nil {
-			fmt.Printf("PNG encode error: %v\n", err)
-			continue
-		}
-		fmt.Printf("%s\n", fileName)
-		if chatContext.InteractiveSession {
-			os2.OpenBrowser(fileName)
 		}
 	}
 	return nil
@@ -205,4 +164,50 @@ func getImageFileName(f *ImageFlags) string {
 	f.CurrentImageCount = thisImageCount + 1
 	filename := fmt.Sprintf("%s-%02d.png", f.OutputPrefix, thisImageCount)
 	return filename
+}
+
+func processImageData(data openai.ImageResponseDataInner, f *ImageFlags, chatContext *ChatContext) error {
+	imgBytes, err := base64.StdEncoding.DecodeString(data.B64JSON)
+	if err != nil {
+		return fmt.Errorf("Base64 decode error: %w", err)
+	}
+
+	r := bytes.NewReader(imgBytes)
+	contentType := http.DetectContentType(imgBytes)
+	var imgData image.Image
+	switch contentType {
+	case "image/png":
+		imgData, err = png.Decode(r)
+		if err != nil {
+			return fmt.Errorf("PNG decode error: %w", err)
+		}
+	case "image/jpeg":
+		imgData, err = jpeg.Decode(r)
+		if err != nil {
+			return fmt.Errorf("JPEG decode error: %w", err)
+		}
+	case "image/webp":
+		imgData, err = webp.Decode(r)
+		if err != nil {
+			return fmt.Errorf("WebP decode error: %w", err)
+		}
+	default:
+		return fmt.Errorf("unsupported image content type: %s", contentType)
+	}
+
+	fileName := getImageFileName(f)
+	file, err := os.Create(fileName)
+	if err != nil {
+		return fmt.Errorf("File creation error: %w", err)
+	}
+	defer func(file *os.File) { _ = file.Close() }(file)
+
+	if err := png.Encode(file, imgData); err != nil {
+		return fmt.Errorf("PNG encode error: %w", err)
+	}
+	fmt.Printf("%s\n", fileName)
+	if chatContext.InteractiveSession {
+		os2.OpenBrowser(fileName)
+	}
+	return nil
 }
