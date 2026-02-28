@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sashabaranov/go-openai"
@@ -58,9 +57,6 @@ func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *
 			chat.MaxTokens = f.maxTokens
 			chat.TopP = f.topP
 		}
-	} else {
-		// no sessionFile provided, create a new sessionFile name
-		f.sessionFile = "chatgpt-cli-" + time.Now().UTC().Format(time.RFC3339) + ".json"
 	}
 
 	// if a sessionFile was not provided, or it did not exist, create a new session
@@ -73,7 +69,7 @@ func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *
 			TopP:        f.topP,
 		}
 		if chatContext.InteractiveSession && shouldWriteSession(f) {
-			fmt.Printf("  to continue with this session, use: --%s %s\n", FlagSessionFile, f.sessionFile)
+			fmt.Printf("  session will be saved to: %s\n", f.sessionFile)
 		}
 	}
 
@@ -81,8 +77,9 @@ func loadOrCreateChatCompletionRequest(f *ChatFlags, chatContext *ChatContext) *
 }
 
 // shouldWriteSession determines if the sessionFile should be written to disk
+// Only writes if --session-file was explicitly provided and --skip-write-session is not set
 func shouldWriteSession(f *ChatFlags) bool {
-	return !f.skipWriteSessionFile
+	return f.sessionFile != "" && !f.skipWriteSessionFile
 }
 
 // loadSessionFile loads the sessionFile from disk
