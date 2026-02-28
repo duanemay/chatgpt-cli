@@ -34,7 +34,7 @@ const (
 
 const (
 	defaultMaxCompletionTokens = 0
-	defaultModel               = openai.GPT5
+	defaultModel               = openai.GPT5ChatLatest
 	defaultRole                = openai.ChatMessageRoleUser
 	defaultTemperature         = 1.0
 	defaultTopP                = 1.0
