@@ -92,6 +92,11 @@ func visionCmdRunner(rootFlags *RootFlags, visionFlags *VisionFlags, chatContext
 		if err := sendVisionMessages(visionFlags, chatContext, chatCompletionRequest, client, chatRequestString); err != nil {
 			log.WithError(err).Fatal()
 		}
+
+		if shouldWriteSession(chatFlags) {
+			writeSessionFile(chatFlags, chatCompletionRequest)
+		}
+
 		return nil
 	}
 }
