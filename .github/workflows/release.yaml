@@ -46,7 +46,7 @@ jobs:
           git push --tags     
 
       - name: GoReleaser Release
-        uses: goreleaser/goreleaser-action@v3
+        uses: goreleaser/goreleaser-action@v7
         env:
           GITHUB_TOKEN: "${{ secrets.GH_PAT }}"
         with:
