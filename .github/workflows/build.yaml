@@ -17,7 +17,7 @@ jobs:
     outputs:
       matrix: ${{ steps.versions.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - uses: arnested/go-version-action@87ed13ca560815b31430e346ea1df537a58ba122
         id: versions
 
@@ -29,7 +29,7 @@ jobs:
       matrix:
         version: ${{ fromJSON(needs.go-versions.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v5
