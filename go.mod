@@ -10,7 +10,7 @@ require (
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	github.com/spf13/viper v1.21.0
 	golang.org/x/image v0.47.0
 	golang.org/x/term v0.47.0
