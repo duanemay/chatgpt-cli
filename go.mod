@@ -7,7 +7,7 @@ require (
 	github.com/onsi/gomega v1.44.0
 	github.com/pkg/errors v0.9.1
 	github.com/pterm/pterm v0.12.84
-	github.com/sashabaranov/go-openai v1.43.0
+	github.com/sashabaranov/go-openai v1.44.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
